@@ -32,7 +32,7 @@ const generateAccessAndRefreshToken = async (userId) => {
 const registerUser = asyncHandler(async (req, res, next) => {
   const { fullname, email, username, password } = req.body;
   //validation
-
+  
   if (
     [fullname, email, username, password].some((field) => field?.trim() === "")
   ) {
@@ -144,7 +144,10 @@ const loginUser = asyncHandler(async (req, res, next) => {
     //set refresh token in cookie
     const options = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: true,
+      sameSite: 'none',
+      domain: 'localhost',  // Important for local development
+      path: '/'
     };
 
     return res

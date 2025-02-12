@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import axios from 'axios';
 
-export default function Homepage() {
+export default function FindUser() {
     const [success, setSuccess] = useState(false);
     const [response, setResponse] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -84,15 +84,12 @@ export default function Homepage() {
               <span className="text-gray-600">Username:</span>
               <span className="font-medium">{response.data.username}</span>
             </div>
-            <div className="flex justify-between items-center py-2 border-b">
-              <span className="text-gray-600">password</span>
-              <span className="font-medium">{response.data.password}</span>
-            </div>
+            
             <div className="flex justify-between items-center py-2">
             <img 
               src={response.data?.coverImage}
               
-              className="w-full h-full rounded-full object-cover border-2 border-gray-200"
+              className="w-full h-full rounded-xl object-cover border-2 border-gray-200"
             />
             </div>
           </div>
