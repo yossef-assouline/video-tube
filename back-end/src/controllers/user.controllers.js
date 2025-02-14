@@ -250,6 +250,7 @@ const getCurrentUser = asyncHandler(async (req, res, next) => {
 });
 
 const updateAccountDetails = asyncHandler(async (req, res, next) => {
+  
   const { fullname, email, username } = req.body;
   const user = await User.findById(req.user._id);
   const updatedUser = await User.findByIdAndUpdate(
@@ -263,6 +264,7 @@ const updateAccountDetails = asyncHandler(async (req, res, next) => {
     },
     { new: true }
   ).select("-password -refreshToken");
+  
   return res
     .status(200)
     .json(new ApiResponse(200, {}, "Account details updated successfully"));
