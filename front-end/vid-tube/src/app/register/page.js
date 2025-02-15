@@ -2,33 +2,27 @@
 import axios from "axios";
 import Image from "next/image";
 import { useState } from "react";
+import { useAuthStore } from "../store/authStore.js";
+import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 export default function Register() {
-  
-  const [success, setSuccess] = useState(false);
+  const { signup, isLoading, error } = useAuthStore();
+
+  const router = useRouter();
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center p-24">
       <form onSubmit={async (e) => {
+        
         e.preventDefault();
         const formData = new FormData(e.target);
-        
         try {
-          const response = await axios.post(
-            'http://localhost:7000/api/v1/users/register', 
-            formData,
-            {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-              },
-            }
-          );
-          console.log('Success:', response.data);
-          setSuccess(true);
-          setTimeout(() => {
-            setSuccess(false);
-          }, 3000);
-          redirect('/homepage');
+          await signup(formData);
+          router.push('/');
+          toast.success('User registered successfully');
         } catch (error) {
-          console.error('Error:', error.response?.data || error.message);
+          console.error('Error:', error);
         }
       }}
       className="space-y-4 w-full max-w-md"
@@ -112,14 +106,13 @@ export default function Register() {
             required
           />
         </div>
-
+        {error && <p className="text-red-500 text-center">{error}</p>}
         <button
           type="submit"
           className="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
         >
-          Submit
+          {!isLoading ? "Loading..." : "Submit"}
         </button>
-        {success && <p className="text-green-500 text-center">User registered successfully</p>}
       </form>
     </div>
   )

@@ -1,6 +1,8 @@
 import axios from "axios";
-
-export default function PasswordModal({ user, onClose }) {
+import { useAuthStore } from "../store/authStore.js";
+import { toast } from "react-hot-toast";
+export default function PasswordModal({ onClose }) {
+  const { changePassword , user ,error , isLoading } = useAuthStore()
   const handlePasswordChange = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
@@ -8,20 +10,11 @@ export default function PasswordModal({ user, onClose }) {
     const newPassword = formData.get("newPassword");
 
     try {
-      const response = await axios.put(
-        "http://localhost:7000/api/v1/users/change-password",
-        {
-          oldPassword,
-          newPassword,
-        },
-        {
-          headers: {
-            authorization: `Bearer ${user.accessToken}`,
-          },
-        }
-      );
-      alert("Password changed successfully!");
-      onClose();
+      await changePassword(newPassword, oldPassword);
+      if(!error){
+        toast.success("Password changed successfully!");
+        onClose();
+      }
     } catch (error) {
       console.error("Password change failed:", error.response?.data || error.message);
       alert("Failed to change password. Please try again.");
@@ -67,7 +60,7 @@ export default function PasswordModal({ user, onClose }) {
             type="submit"
             className="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
           >
-            Update Password
+            {isLoading ? "Updating..." : "Update Password"}
           </button>
         </form>
       </div>

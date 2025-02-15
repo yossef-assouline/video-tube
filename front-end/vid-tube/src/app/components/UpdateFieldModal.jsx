@@ -1,12 +1,16 @@
 import { useState } from "react";
+import { useAuthStore } from "../store/authStore";
+import Spinner from "./Spinner.jsx";
 
 export default function UpdateFieldModal({ currentValues, onClose, onUpdate }) {
   const [formData, setFormData] = useState(currentValues);
+  const { isLoading } = useAuthStore();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await onUpdate(formData);
+      
       onClose();
     } catch (error) {
       console.error("Error updating fields:", error);
@@ -67,7 +71,7 @@ export default function UpdateFieldModal({ currentValues, onClose, onUpdate }) {
               type="submit"
               className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
             >
-              Update
+              {isLoading ? <Spinner/> : "Update"}
             </button>
           </div>
         </form>

@@ -1,50 +1,21 @@
 import axios from "axios";
-import Cookies from "js-cookie";
+import { useAuthStore } from "../store/authStore";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
+import { useEffect } from "react";
 
-export default function LoginForm({ setUser }) {
+export default function LoginForm() {
+  const { login, isLoading, error, user, isAuthenticated } = useAuthStore();
+  const router = useRouter();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const email = formData.get("email");
     const password = formData.get("password");
-
     try {
-      const response = await axios.post(
-        "http://localhost:7000/api/v1/users/login",
-        {
-          email,
-          password,
-        }
-      );
-
-      const userData = response.data.data;
-
-      if (!userData?.accessToken) {
-        console.error("No access token in response:", userData);
-        return;
-      }
-
-      Cookies.set("accessToken", userData.accessToken, {
-        path: "/",
-        secure: true,
-        sameSite: "Strict",
-      });
-
-      axios.defaults.withCredentials = true;
-      axios.defaults.headers.common["authorization"] = `Bearer ${userData.accessToken}`;
-
-      if (userData.refreshToken) {
-        Cookies.set("refreshToken", userData.refreshToken, {
-          path: "/",
-          secure: true,
-          sameSite: "Strict",
-        });
-      }
-
-      axios.defaults.baseURL = "http://localhost:7000/api/v1";
-
-      setUser(userData);
-      localStorage.setItem("user", JSON.stringify(userData));
+      login(email, password);
+      toast.success("Login successful");
     } catch (error) {
       console.error("Login failed:", error.response?.data || error.message);
     }
@@ -83,9 +54,10 @@ export default function LoginForm({ setUser }) {
           type="submit"
           className="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
         >
-          Login
+          {isLoading ? "Loading..." : "Login"}
         </button>
       </form>
+      {error && <p className="text-red-500 text-center">{error}</p>}
     </div>
   );
-} 
+}

@@ -4,47 +4,23 @@ import axios from "axios";
 import Cookies from "js-cookie";
 import LoginForm from "./components/LoginForm";
 import UserProfile from "./components/UserProfile";
+import { redirect } from "next/navigation";
+import { useAuthStore } from "./store/authStore";
 
 export default function Home() {
-  const [user, setUser] = useState(null);
-
+  const { user , isAuthenticated , checkAuth } = useAuthStore();
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
+    checkAuth()
+  }, [checkAuth])
 
-  const handleLogout = async () => {
-    try {
-      const storedUser = JSON.parse(localStorage.getItem("user"));
-      const token = storedUser?.token;
-
-      const response = await axios.post(
-        "http://localhost:7000/api/v1/users/logout",
-        {},
-        {
-          headers: {
-            authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      localStorage.removeItem("user");
-      Cookies.remove("accessToken");
-      Cookies.remove("refreshToken");
-      setUser(null);
-    } catch (error) {
-      console.error("Logout failed:", error.response?.data || error.message);
-    }
-  };
 
   return (
     <div className="min-h-screen bg-gray-100">
-      {!user ? (
-        <LoginForm setUser={setUser} />
+
+        {!isAuthenticated ? (
+        <LoginForm user={user} />
       ) : (
-        <UserProfile user={user} onLogout={handleLogout} />
+        redirect('/profile')
       )}
     </div>
   );
