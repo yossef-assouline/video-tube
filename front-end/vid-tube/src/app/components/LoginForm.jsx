@@ -3,6 +3,7 @@ import { useAuthStore } from "../store/authStore";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { useEffect } from "react";
+import Spinner from "./Spinner";
 
 export default function LoginForm() {
   const { login, isLoading, error, user, isAuthenticated } = useAuthStore();
@@ -15,7 +16,9 @@ export default function LoginForm() {
     const password = formData.get("password");
     try {
       login(email, password);
-      toast.success("Login successful");
+      if(!error){
+        toast.success("Login successful");
+      }
     } catch (error) {
       console.error("Login failed:", error.response?.data || error.message);
     }
@@ -54,10 +57,10 @@ export default function LoginForm() {
           type="submit"
           className="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
         >
-          {isLoading ? "Loading..." : "Login"}
+          {isLoading ? <Spinner /> : "Login"}
         </button>
       </form>
-      {error && <p className="text-red-500 text-center">{error}</p>}
+      
     </div>
   );
 }

@@ -150,7 +150,6 @@ const loginUser = asyncHandler(async (req, res, next) => {
       path: '/',
       maxAge: 24 * 60 * 60 * 1000  // 24 hours in milliseconds
     };
-    console.log(refreshToken , accessToken);
     return res
       .status(200)
       .cookie("refreshToken", refreshToken, options)

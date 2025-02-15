@@ -10,6 +10,7 @@ import { useAuthStore } from "./store/authStore";
 export default function Home() {
   const { user , isAuthenticated , checkAuth } = useAuthStore();
   useEffect(() => {
+    
     checkAuth()
   }, [checkAuth])
 
