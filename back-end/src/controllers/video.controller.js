@@ -16,7 +16,7 @@ const getAllVideos = asyncHandler(async (req, res) => {
 });
 
 const publishAVideo = asyncHandler(async (req, res) => {
-  console.log("Files received:", req.files); // Debug log to see what's being received
+
   
   if (!req.files || Object.keys(req.files).length === 0) {
     throw new ApiError(400, "No files were uploaded");
@@ -25,6 +25,7 @@ const publishAVideo = asyncHandler(async (req, res) => {
   const { title, description } = req.body;
   const videoFileLocalPath = req.files?.videoFile?.[0]?.path;
   const thumbnailLocalPath = req.files?.thumbnail?.[0]?.path;
+  console.log(thumbnailLocalPath, videoFileLocalPath);
   if (!title || !description || !videoFileLocalPath || !thumbnailLocalPath){
     throw new ApiError(400, "All fields are required");
   }
@@ -35,8 +36,6 @@ const publishAVideo = asyncHandler(async (req, res) => {
   try {
     const uploadVideoResponse = await uploadOnCloudinary(videoFileLocalPath);
     const uploadThumbnailResponse = await uploadOnCloudinary(thumbnailLocalPath);
-    const metadata = await getVideoMetadata(videoFile.path);
-    const duration = metadata.duration; 
     // TODO: get video, upload to cloudinary, create video
     const video = await Video.create({
       owner: req.user._id,
@@ -44,7 +43,7 @@ const publishAVideo = asyncHandler(async (req, res) => {
       thumbnail: uploadThumbnailResponse.url,
       title,
       description,
-      duration,
+      duration : uploadVideoResponse.duration,
       views: 0,
       isPublished: true,
     });
