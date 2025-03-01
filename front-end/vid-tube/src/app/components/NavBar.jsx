@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useAuthStore } from '../store/authStore';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import UploadVideoModal from './UploadVideoModal';
 
 export default function NavBar() {
   const { user, isAuthenticated, logout, checkAuth } = useAuthStore();
@@ -11,10 +12,12 @@ export default function NavBar() {
   const [searchQuery, setSearchQuery] = useState('');
   const dropdownRef = useRef(null);
   const router = useRouter();
+  const [showUploadModal, setShowUploadModal] = useState(false);
 
   // Close dropdown when clicking outside
   useEffect(() => {
-    checkAuth();  
+    checkAuth();
+  
   }, [checkAuth]);
   
 
@@ -32,6 +35,8 @@ export default function NavBar() {
   };
 
   return (
+
+    
     <nav className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
@@ -75,7 +80,29 @@ export default function NavBar() {
           </div>
 
           {/* Right side - User Menu */}
-          <div className="flex items-center">
+          <div className="flex items-center space-x-4">
+            {isAuthenticated && (
+              <button
+                onClick={() => setShowUploadModal(true)}
+                className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 flex items-center"
+              >
+                <svg 
+                  className="w-5 h-5 mr-2" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    strokeWidth={2} 
+                    d="M12 4v16m8-8H4" 
+                  />
+                </svg>
+                Upload
+              </button>
+            )}
+            
             {isAuthenticated ? (
               <div className="relative" ref={dropdownRef}>
                 <button
@@ -143,6 +170,10 @@ export default function NavBar() {
           </div>
         </div>
       </div>
+      <UploadVideoModal 
+        isOpen={showUploadModal} 
+        onClose={() => setShowUploadModal(false)} 
+      />
     </nav>
   );
 }

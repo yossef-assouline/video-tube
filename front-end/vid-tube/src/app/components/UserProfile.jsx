@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import Spinner from "./Spinner";
+import Navbar from "./Navbar";
 
 import axios from "axios";
 
@@ -83,6 +84,8 @@ export default function UserProfile({ onLogout }) {
   };
 
   return (
+    <>
+    <Navbar />
     <div className="w-full">
       {isLoading && (
         <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
@@ -280,5 +283,6 @@ export default function UserProfile({ onLogout }) {
         </div>
       )}
     </div>
+    </>
   );
 }

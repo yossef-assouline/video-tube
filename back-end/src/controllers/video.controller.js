@@ -220,6 +220,78 @@ const updateVideo = asyncHandler(async (req, res, next) => {
   res.status(200).json(new ApiResponse(200, "Video updated successfully"));
 });
 
+const getPublishedVideosByChannel = asyncHandler(async (req, res, next) => {
+  const { userId } = req.params;
+  const { sortBy = "latest" } = req.query;
+
+  if (!userId) {
+    return next(new ApiError(400, "user id is missing"));
+  }
+
+  if (!isValidObjectId(userId)) {
+    return next(new ApiError(400, "Invalid User ID"));
+  }
+
+  const pipeline = [
+    {
+      $match: {
+        owner: new mongoose.Types.ObjectId(userId),
+      },
+    },
+    {
+      $match: {
+        isPublished: true,
+      },
+    },
+  ];
+
+  // Dynamically add the $sort stage based on sortBy
+  if (sortBy === "latest") {
+    pipeline.push({
+      $sort: { createdAt: -1 }, // Sort by newest first
+    });
+  } else if (sortBy === "oldest") {
+    pipeline.push({
+      $sort: { createdAt: 1 }, // Sort by oldest first
+    });
+  } else if (sortBy === "popular") {
+    pipeline.push({
+      $sort: { views: -1 }, // Sort by highest views
+    });
+  } else {
+    throw new Error(`Invalid sortBy value: ${sortBy}`);
+  }
+
+  // Add the $project stage
+  pipeline.push({
+    $project: {
+      thumbnail: 1,
+      title: 1,
+      duration: 1,
+      views: 1,
+      createdAt: 1,
+      updatedAt: 1,
+    },
+  });
+
+  const videos = await Video.aggregate(pipeline);
+
+  console.log("videos", videos);
+
+  if (!videos) {
+    return next(new ApiError("user does not exist in the DB"));
+  }
+
+  res
+    .status(200)
+    .json(
+      new ApiResponse(
+        200,
+        videos,
+        "all the published videos of the channel fetched successfully"
+      )
+    );
+});
 const deleteVideo = asyncHandler(async (req, res, next) => {
   const { videoId } = req.params;
   if (!videoId) {
@@ -275,4 +347,5 @@ export {
   updateVideo,
   deleteVideo,
   togglePublishStatus,
+  getPublishedVideosByChannel,
 };
