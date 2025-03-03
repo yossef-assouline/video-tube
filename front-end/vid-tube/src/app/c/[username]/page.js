@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 export default function ChannelPage() {
   const { username } = useParams();
   const { channelData, isLoading, error, findChannel, videos, toggleSubscribe} = useActionStore();
-  const { user } = useAuthStore();
+  const { user} = useAuthStore();
   const [isSubscribed, setIsSubscribed] = useState(false);
   const router = useRouter();
   const redirectToWatchPage = (videoId) => {
@@ -21,7 +21,11 @@ export default function ChannelPage() {
   useEffect(() => {
     findChannel(username);
   }, [username, findChannel]);
-  
+  useEffect(() => {
+    if(channelData?.isSubscribed === true){
+      setIsSubscribed(true)
+    }
+  }, [channelData]);
 
   if (isLoading) {
     return (

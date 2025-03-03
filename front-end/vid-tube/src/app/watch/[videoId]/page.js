@@ -1,58 +1,66 @@
-"use client"
-import { useEffect, useState } from 'react'
-import { useParams } from 'next/navigation'
-import { useActionStore } from "../../store/actionStore.js"
-import { useAuthStore } from '../../store/authStore.js'
-import Image from 'next/image'
-import NavBar from '../../components/NavBar.jsx'
+"use client";
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import { useActionStore } from "../../store/actionStore.js";
+import { useAuthStore } from "../../store/authStore.js";
+import Image from "next/image";
+import NavBar from "../../components/NavBar.jsx";
 
 export default function WatchPage() {
-  const { videoId } = useParams()
-  const { user } = useAuthStore()
-  const { getVideoById, toggleLike, toggleSubscribe, video , isLoading,channelData} = useActionStore()
-  const [isSubscribed, setIsSubscribed] = useState(false)
-  
- 
+  const { videoId } = useParams();
+  const { user } = useAuthStore();
+  const {
+    getVideoById,
+    toggleLike,
+    toggleSubscribe,
+    video,
+    isLoading,
+    channelData,
+  } = useActionStore();
+  const [isSubscribed, setIsSubscribed] = useState(false);
 
   useEffect(() => {
     getVideoById(videoId);
-    
-  }, [videoId, getVideoById ]);
-
+  }, [videoId, getVideoById]);
+  useEffect(() => {
+    if (video?.isSubscribed === true) {
+      setIsSubscribed(true);
+    }
+  }, [video]);
+  
   if (isLoading) {
     return (
       <div className="w-full h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-gray-900"></div>
       </div>
-    )
+    );
   }
 
   if (!video) {
-    return <div>
-      <NavBar />
-      <div className='w-full h-screen flex items-center justify-center'>
-      <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">Video Not Found</h2>
-        <button 
-          onClick={() => window.location.href = '/'}
-          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition-colors"
-        >
-          Back to Home
-        </button>
+    return (
+      <div>
+        <NavBar />
+        <div className="w-full h-screen flex items-center justify-center">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">
+              Video Not Found
+            </h2>
+            <button
+              onClick={() => (window.location.href = "/")}
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition-colors"
+            >
+              Back to Home
+            </button>
+          </div>
+        </div>
       </div>
-      </div>
-    </div>
+    );
   }
 
   const handleLike = async () => {
-    await toggleLike(video._id)
-    setIsLiked(!isLiked)
-  }
-
-  const handleSubscribe = async () => {
-    toggleSubscribe(video.owner[0]._id)
-    setIsSubscribed(!isSubscribed)
-  }
+    await toggleLike(video._id);
+    setIsLiked(!isLiked);
+  };
 
   return (
     <>
@@ -62,7 +70,7 @@ export default function WatchPage() {
           {/* Video Player Column */}
           <div className="lg:col-span-2">
             <div className="aspect-video bg-black rounded-lg overflow-hidden">
-              <video 
+              <video
                 src={video.videoFile}
                 controls
                 autoPlay={true}
@@ -85,17 +93,23 @@ export default function WatchPage() {
                   />
                   <div>
                     <h3 className="font-semibold">{video.owner[0].fullname}</h3>
-                    <p className="text-sm text-gray-500">{video.owner[0].username}</p>
+                    <p className="text-sm text-gray-500">
+                      {video.owner[0].username}
+                    </p>
                   </div>
                   {video.owner[0]._id !== user?._id && (
                     <button
-                    onClick={() => toggleSubscribe(video.owner[0]._id)}
+                      onClick={() => {
+                        toggleSubscribe(video.owner[0]._id);
+                        setIsSubscribed(!isSubscribed);
+                      }}
                       className={`ml-4 px-4 py-2 rounded-full ${
-                       
-                          isSubscribed ? 'bg-gray-200 text-black' : 'bg-red-600 text-white'  
+                        isSubscribed
+                          ? "bg-gray-200 text-black"
+                          : "bg-red-600 text-white"
                       }`}
                     >
-                      {isSubscribed ? 'Subscribed' : 'Subscribe'}
+                      {isSubscribed ? "Subscribed" : "Subscribe"}
                     </button>
                   )}
                 </div>
@@ -105,8 +119,8 @@ export default function WatchPage() {
                     className="flex items-center gap-2"
                   >
                     <svg
-                      className={`w-6 h-6 ${'text-blue-600'}`}
-                      fill={'currentColor'}
+                      className={`w-6 h-6 ${"text-blue-600"}`}
+                      fill={"currentColor"}
                       viewBox="0 0 24 24"
                       stroke="currentColor"
                     >
@@ -165,5 +179,5 @@ export default function WatchPage() {
         </div>
       </div>
     </>
-  )
+  );
 }

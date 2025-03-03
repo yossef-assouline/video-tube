@@ -155,6 +155,30 @@ const getVideoById = asyncHandler(async (req, res, next) => {
         ],
       },
     },
+    {
+      $lookup: {
+        from: "subscriptions",
+        localField: "owner._id",
+        foreignField: "channel",
+        as: "subscribers"
+      }
+    },
+    {
+      $addFields: {
+        isSubscribed: {
+          $cond: {
+            if: {
+              $in: [
+                new mongoose.Types.ObjectId(req.user?._id),
+                "$subscribers.subscriber"
+              ]
+            },
+            then: true,
+            else: false
+          }
+        }
+      }
+    }
   ];
   video = await Video.aggregate(pipeline);
   console.log(video);

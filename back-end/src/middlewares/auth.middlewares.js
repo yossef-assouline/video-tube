@@ -3,10 +3,10 @@ import {User} from "../models/user.models.js";
 import {ApiError} from "../utils/ApiError.js";
 import {asyncHandler} from "../utils/asyncHandler.js";
 
-const verifyJWT = asyncHandler(async (req, res, next) => {
+const verifyJWT = asyncHandler(async (req, _res, next) => {
   try {
     const token = req.cookies?.accessToken || null;
-     
+    
   
  
     
@@ -27,6 +27,7 @@ const verifyJWT = asyncHandler(async (req, res, next) => {
     }
 
     req.user = user;
+    
     next();
   } catch (error) {
     console.error("Auth middleware error:", error);
