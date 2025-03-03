@@ -5,10 +5,12 @@ import { useActionStore } from "../../store/actionStore.js";
 import { useAuthStore } from "../../store/authStore.js";
 import Image from "next/image";
 import NavBar from "../../components/NavBar.jsx";
+import { useRouter } from "next/navigation";
 
 export default function WatchPage() {
   const { videoId } = useParams();
   const { user } = useAuthStore();
+  const router = useRouter();
   const {
     getVideoById,
     toggleLike,
@@ -85,17 +87,18 @@ export default function WatchPage() {
               <div className="flex items-center justify-between mt-4">
                 <div className="flex items-center gap-4">
                   <Image
+                    onClick={() => {
+                      router.push(`/c/${video.owner[0].username}`);
+                    }}
                     src={video.owner[0].avatar || "/default-avatar.jpg"}
                     alt={video.owner[0].username}
                     width={40}
                     height={40}
-                    className="rounded-full"
+                    className="rounded-full cursor-pointer aspect-square"
                   />
                   <div>
-                    <h3 className="font-semibold">{video.owner[0].fullname}</h3>
-                    <p className="text-sm text-gray-500">
-                      {video.owner[0].username}
-                    </p>
+                    <h3 className="font-semibold">{video.owner[0].username}</h3>
+                    
                   </div>
                   {video.owner[0]._id !== user?._id && (
                     <button

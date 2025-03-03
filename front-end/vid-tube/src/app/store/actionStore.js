@@ -10,6 +10,8 @@ export const useActionStore = create((set) => ({
   videos: [],
   error: null,
   video: null,
+  toggleSubscribeLoading : false,
+
   findChannel: async (username) => {
     set({ isLoading: true, error: null });
     try {
@@ -59,7 +61,7 @@ export const useActionStore = create((set) => ({
     }
   },
   toggleSubscribe: async (channelId) => {
-    set({ isLoading: true, error: null });
+    set({ toggleSubscribeLoading: true, error: null });
     try {
       const response = await axios.post(
         `${SUBSCRIPTION_API_URL}/c/${channelId}`
