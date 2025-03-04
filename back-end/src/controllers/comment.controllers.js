@@ -44,6 +44,22 @@ const getVideoComments = asyncHandler(async (req, res, next) => {
             ],
           },
         },
+        {
+          $lookup: {
+            from: "likes",
+            localField: "_id",
+            foreignField: "comment",
+            as: "likes"
+          }
+        },
+        {
+          $addFields: {
+            likes: { $size: "$likes" },
+            isLiked: {
+              $in: [req.user._id, "$likes.likedBy"]
+            }
+          }
+        }
       ];
       const comments = Comment.aggregate(pipeline);
       
@@ -202,7 +218,6 @@ const updateComment = asyncHandler(async (req, res, next) => {
 
 const deleteComment = asyncHandler(async (req, res, next) => {
     const { commentId } = req.params;
-    console.log("ok")
 
   if (!commentId) {
     return next(new ApiError(400, "comment id is missing."));
@@ -257,6 +272,7 @@ const deleteComment = asyncHandler(async (req, res, next) => {
   }
 
   const deletedCommentDoc = await Comment.findByIdAndDelete(commentId);
+  console.log("deletedCommentDoc", deletedCommentDoc);
   console.log(deletedCommentDoc);
 
   res

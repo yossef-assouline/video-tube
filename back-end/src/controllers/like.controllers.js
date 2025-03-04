@@ -47,6 +47,8 @@ const toggleVideoLike = asyncHandler(async (req, res, next) => {
 const toggleCommentLike = asyncHandler(async (req, res, next) => {
     const { commentId } = req.params;
 
+    console.log("commentId", commentId);
+
     if (!commentId) {
       return next(new ApiError(400, "video id is missing."));
     }
@@ -86,10 +88,10 @@ const toggleCommentLike = asyncHandler(async (req, res, next) => {
     res.status(200).json(new ApiResponse(200, likeDoc, "comment like added"));
 });
 
-const toggleTweetLike = asyncHandler(async (req, res, next) => {
-  const { tweetId } = req.params;
-  //TODO: toggle like on tweet
-});
+// const toggleTweetLike = asyncHandler(async (req, res, next) => {
+//   const { tweetId } = req.params;
+//   //TODO: toggle like on tweet
+// });
 
 const getLikedVideos = asyncHandler(async (req, res, next) => {
   //TODO: get all liked videos

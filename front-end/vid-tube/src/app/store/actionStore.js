@@ -149,5 +149,31 @@ export const useActionStore = create((set) => ({
       });
       return null;
     }
+  },
+  updateComment: async (commentId, editedContent) => {
+    set({ commentLoading: true, error: null });
+    try {
+      const response = await axios.patch(`${COMMENT_API_URL}/c/${commentId}`, { updatedComment: editedContent });
+      set({ commentLoading: false, error: null });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Error updating comment",
+        commentLoading: false,
+      });
+      return null;
+    }
+  },
+  toggleCommentLike: async (commentId) => {
+    try {
+      
+      const response = await axios.post(`${LIKE_API_URL}/toggle/c/${commentId}`);
+      
+      return response.data;
+    } catch (error) {
+      set({ 
+        error: error.response?.data?.message || "Error liking comment",
+      });
+      throw error;
+    }
   }
 }));
