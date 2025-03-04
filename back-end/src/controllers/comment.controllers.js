@@ -8,17 +8,21 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 
 const getVideoComments = asyncHandler(async (req, res, next) => {
     //TODO: get all comments for a video
+    
     const {videoId} = req.params
     const {page = 1, limit = 10} = req.query
     if(!isValidObjectId(videoId)) {
         throw new ApiError(400, "Invalid video id");
+      
     }
     if(!videoId) {
         throw new ApiError(400, "Video id is required");
+   
     }
     const video = await Video.findById(videoId);
     if(!video) {
         throw new next(new ApiError(400, `Video ${videoId} not found`));
+    
     }
     const pipeline = [
         { $match: { video: new mongoose.Types.ObjectId(videoId) } },
@@ -32,8 +36,8 @@ const getVideoComments = asyncHandler(async (req, res, next) => {
               {
                 $project: {
                   _id: 0,
-                  userName: 1,
-                  fullName: 1,
+                  username: 1,
+                  fullname: 1,
                   avatar: 1,
                 },
               },
@@ -41,16 +45,22 @@ const getVideoComments = asyncHandler(async (req, res, next) => {
           },
         },
       ];
-      const comments = await Comment.aggregate(pipeline);
+      const comments = Comment.aggregate(pipeline);
+      
       if(!comments) {
         throw new ApiError(400, "No comments found");
+
+        
       }
+      
       const options = {
         page,
         limit,
         pagination: true,
       }
+      
       const response = await Comment.aggregatePaginate(comments, options);
+      
       res.status(200).json(
         new ApiResponse(
           200,
@@ -192,6 +202,7 @@ const updateComment = asyncHandler(async (req, res, next) => {
 
 const deleteComment = asyncHandler(async (req, res, next) => {
     const { commentId } = req.params;
+    console.log("ok")
 
   if (!commentId) {
     return next(new ApiError(400, "comment id is missing."));

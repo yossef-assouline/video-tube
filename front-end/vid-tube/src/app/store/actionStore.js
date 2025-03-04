@@ -3,6 +3,8 @@ import axios from "axios";
 const USER_API_URL = "http://localhost:7000/api/v1/users";
 const VIDEO_API_URL = "http://localhost:7000/api/v1/videos";
 const SUBSCRIPTION_API_URL = "http://localhost:7000/api/v1/subscriptions";
+const LIKE_API_URL = "http://localhost:7000/api/v1/likes";
+const COMMENT_API_URL = "http://localhost:7000/api/v1/comments";
 axios.defaults.withCredentials = true;
 export const useActionStore = create((set) => ({
   channelData: null,
@@ -11,6 +13,9 @@ export const useActionStore = create((set) => ({
   error: null,
   video: null,
   toggleSubscribeLoading : false,
+  toggleLikeLoading : false,
+  comments: [],
+  commentLoading: false,
 
   findChannel: async (username) => {
     set({ isLoading: true, error: null });
@@ -90,4 +95,59 @@ export const useActionStore = create((set) => ({
       return null;
     }
   },
+  toggleLike: async (videoId) => {
+    
+    set({ toggleLikeLoading: true, error: null });
+    try {
+      const response = await axios.post(`${LIKE_API_URL}/toggle/v/${videoId}`);
+      set({ isLoading: false, error: null });
+      return response.data.data;
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Error toggling like",
+        isLoading: false,
+      });
+      return null;
+    }
+  },
+  getVideoComments: async (videoId) => {
+    set({ commentLoading: true, error: null });
+    try {
+      const response = await axios.get(`${COMMENT_API_URL}/${videoId}`);
+      set({ commentLoading: false, error: null, comments: response.data.data });
+      return response.data.data;
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Error fetching comments",
+        commentLoading: false,
+      });
+      return null;
+    }
+  },
+  postComment: async (videoId, comment) => {
+    set({ commentLoading: true, error: null });
+    try {
+      const response = await axios.post(`${COMMENT_API_URL}/${videoId}`, { comment });
+      set({ commentLoading: false, error: null });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Error posting comment",
+        commentLoading: false,
+      });
+      return null;
+    }
+  },
+  deleteComment: async (commentId) => {
+    set({ commentLoading: true, error: null });
+    try {
+      const response = await axios.delete(`${COMMENT_API_URL}/c/${commentId}`);
+      set({ commentLoading: false, error: null });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Error deleting comment",
+        commentLoading: false,
+      });
+      return null;
+    }
+  }
 }));

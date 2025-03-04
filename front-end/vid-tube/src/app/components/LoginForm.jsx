@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import { useEffect } from "react";
 import Spinner from "./Spinner";
-
+import Link from "next/link";
 export default function LoginForm() {
   const { login, isLoading, error, user, isAuthenticated } = useAuthStore();
   const router = useRouter();
@@ -25,8 +25,9 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md">
+    <div className="flex justify-center items-center h-screen flex-col">
+      <h1 className="text-2xl font-bold mb-4">Login</h1>
+      <form onSubmit={handleSubmit} className="space-y-4 w-2/3 max-w-md">
         <div>
           <label htmlFor="email" className="block text-sm font-medium">
             Email Address
@@ -55,12 +56,17 @@ export default function LoginForm() {
 
         <button
           type="submit"
-          className="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+          className="w-full rounded-md bg-emerald-500 hover:bg-emerald-600 px-4 py-2 text-white"
         >
           {isLoading ? <Spinner /> : "Login"}
         </button>
       </form>
-      
+      <p className="text-center text-sm mt-2">
+        Don't have an account?{" "}
+        <Link href="/register">
+          <span className="text-emerald-500 hover:underline">Sign up</span>
+        </Link>
+      </p>
     </div>
   );
 }

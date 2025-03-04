@@ -143,12 +143,12 @@ const getVideoById = asyncHandler(async (req, res, next) => {
         from: "users",
         localField: "owner",
         foreignField: "_id",
-        as:"owner",
-        pipeline:[
+        as: "owner",
+        pipeline: [
           {
             $project: {
-              fullname: 1,
               username: 1,
+              fullname: 1,
               avatar: 1,
             },
           },
@@ -157,31 +157,51 @@ const getVideoById = asyncHandler(async (req, res, next) => {
     },
     {
       $lookup: {
+        from: "likes",
+        localField: "_id",
+        foreignField: "video",
+        as: "likes",
+      },
+    },
+    {
+      $lookup: {
         from: "subscriptions",
         localField: "owner._id",
         foreignField: "channel",
-        as: "subscribers"
-      }
+        as: "subscribers",
+      },
     },
     {
       $addFields: {
+        likes: {
+          $size: "$likes",
+        },
+        subscribers: {
+          $size: "$subscribers",
+        },
+        isLiked: {
+          $cond: {
+            if: {
+              $in: [req.user._id, "$likes.likedBy"],
+            },
+            then: true,
+            else: false,
+          },
+        },
         isSubscribed: {
           $cond: {
             if: {
-              $in: [
-                new mongoose.Types.ObjectId(req.user?._id),
-                "$subscribers.subscriber"
-              ]
+              $in: [req.user._id, "$subscribers.subscriber"],
             },
             then: true,
-            else: false
-          }
-        }
-      }
-    }
+            else: false,
+          },
+        },
+      },
+    },
   ];
   video = await Video.aggregate(pipeline);
-  console.log(video);
+  
   res
     .status(200)
     .json(

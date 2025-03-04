@@ -8,7 +8,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import Spinner from "./Spinner";
-import Navbar from "./Navbar";
+import Navbar from "./NavBar";
 
 import axios from "axios";
 

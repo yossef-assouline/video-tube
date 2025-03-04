@@ -145,7 +145,7 @@ export default function UploadVideoModal({ isOpen, onClose }) {
                       onChange={(e) => setIsPublic(e.target.checked)}
                       className="sr-only"
                     />
-                    <div className={`block w-10 h-6 rounded-full ${isPublic ? 'bg-blue-500' : 'bg-gray-300'}`}></div>
+                    <div className={`block w-10 h-6 rounded-full ${isPublic ? 'bg-emerald-500' : 'bg-gray-300'}`}></div>
                     <div className={`dot absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition transform ${isPublic ? 'translate-x-4' : ''}`}></div>
                   </div>
                   <span className="ml-3 text-sm font-medium text-gray-700">
@@ -164,7 +164,7 @@ export default function UploadVideoModal({ isOpen, onClose }) {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+                  className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-md"
                 >
                   Upload
                 </button>

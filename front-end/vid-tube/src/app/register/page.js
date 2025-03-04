@@ -6,6 +6,7 @@ import { useAuthStore } from "../store/authStore.js";
 import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import  Spinner  from "../components/Spinner.jsx";
 export default function Register() {
   const { signup, isLoading, error } = useAuthStore();
 
@@ -28,14 +29,14 @@ export default function Register() {
       className="space-y-4 w-full max-w-md"
       >
         <div>
-          <label htmlFor="fullname" className="block text-sm font-medium">
+          <label htmlFor="fullname" className="block text-sm font-medium ">
             Full Name
           </label>
           <input
             type="text"
             id="fullname"
             name="fullname"
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 "
             required
           />
         </div>
@@ -83,35 +84,42 @@ export default function Register() {
           <label htmlFor="avatar" className="block text-sm font-medium">
             Avatar
           </label>
-          <input
-            type="file"
+          <input type="file"
             id="avatar"
             name="avatar"
             accept="image/*"
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-            required
-          />
+          
+           
+            required className="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm text-gray-400 file:border-0 file:bg-transparent file:text-gray-600 file:text-sm file:font-medium"/>
+
+        
+         
         </div>
 
         <div>
           <label htmlFor="coverImage" className="block text-sm font-medium">
             Cover Image
           </label>
-          <input
-            type="file"
+          <input  type="file"
             id="coverImage"
             name="coverImage"
             accept="image/*"
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
-            required
-          />
+           
+            required className="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm text-gray-400 file:border-0 file:bg-transparent file:text-gray-600 file:text-sm file:font-medium"/>
+
         </div>
-        {error && <p className="text-red-500 text-center">{error}</p>}
+        
         <button
           type="submit"
-          className="w-full rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
+          className="w-full rounded-md bg-emerald-500 px-4 py-2 text-white hover:bg-emerald-600"
         >
-          {!isLoading ? "Loading..." : "Submit"}
+          {isLoading ? (
+            <div className="flex items-center justify-center">
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+            </div>
+          ) : (
+            "Submit"
+          )}
         </button>
       </form>
     </div>

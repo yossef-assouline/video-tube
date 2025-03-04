@@ -32,7 +32,7 @@ const toggleVideoLike = asyncHandler(async (req, res, next) => {
     if (alreadyLiked) {
       // remove like
       await Like.deleteOne(alreadyLiked);
-  
+      console.log("video like removed");
       return res.status(200).json(new ApiResponse(200, {}, "video like removed"));
     }
   
@@ -40,7 +40,7 @@ const toggleVideoLike = asyncHandler(async (req, res, next) => {
       video: videoId,
       likedBy: req.user._id,
     });
-  
+    console.log("video like added");
     res.status(200).json(new ApiResponse(200, likeDoc, "video like added"));
 });
 
