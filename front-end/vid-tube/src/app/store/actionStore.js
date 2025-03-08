@@ -9,6 +9,7 @@ axios.defaults.withCredentials = true;
 export const useActionStore = create((set) => ({
   channelData: null,
   isLoading: false,
+  isFetchingVideos: false,
   videos: [],
   error: null,
   video: null,
@@ -94,7 +95,18 @@ export const useActionStore = create((set) => ({
       });
     }
   },
-
+  fetchAllVideos: async () => {
+    set({ isFetchingVideos: true, error: null });
+    try {
+      const response = await axios.get(VIDEO_API_URL);
+      set({ isFetchingVideos: false, error: null, videos: response.data.data });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Error fetching videos",
+        isFetchingVideos: false,
+      });
+    }
+  },  
   toggleSubscribe: async (channelId) => {
     set({ toggleSubscribeLoading: true, error: null });
     try {
