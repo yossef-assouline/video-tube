@@ -12,12 +12,10 @@ const getVideoComments = asyncHandler(async (req, res, next) => {
     const {videoId} = req.params
     const {page = 1, limit = 10} = req.query
     if(!isValidObjectId(videoId)) {
-        throw new ApiError(400, "Invalid video id");
-      
+        throw new ApiError(400, "Invalid video id");      
     }
     if(!videoId) {
-        throw new ApiError(400, "Video id is required");
-   
+        throw new ApiError(400, "Video id is required");   
     }
     const video = await Video.findById(videoId);
     if(!video) {

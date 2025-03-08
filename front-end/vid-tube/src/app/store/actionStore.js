@@ -46,7 +46,6 @@ export const useActionStore = create((set) => ({
       set({ isLoading: false });
     }
   },
-
   publishVideo: async (formData) => {
     set({ isLoading: true, error: null });
     try {
@@ -65,6 +64,37 @@ export const useActionStore = create((set) => ({
       return null;
     }
   },
+  deleteVideo: async (videoId) => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await axios.delete(`${VIDEO_API_URL}/${videoId}`);
+      set({ isLoading: false, error: null });
+      return response.data.data;
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Error deleting video",
+        isLoading: false,
+      });
+    }
+  },
+  updateVideo: async (videoId, updatedData) => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await axios.put(`${VIDEO_API_URL}/${videoId}`, updatedData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      set({ isLoading: false, error: null });
+      return response.data.data;  
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Error updating video",
+        isLoading: false,
+      });
+    }
+  },
+
   toggleSubscribe: async (channelId) => {
     set({ toggleSubscribeLoading: true, error: null });
     try {
@@ -176,4 +206,5 @@ export const useActionStore = create((set) => ({
       throw error;
     }
   }
+  
 }));

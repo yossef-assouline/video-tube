@@ -216,14 +216,20 @@ const getVideoById = asyncHandler(async (req, res, next) => {
 const updateVideo = asyncHandler(async (req, res, next) => {
   const { videoId } = req.params;
   if (!videoId) {
-    return next(new ApiError(400, "Video id is required"));
+    return next(new ApiError(400, "video id is missing."));
   }
+
   if (!isValidObjectId(videoId)) {
-    return next(new ApiError(400, "Invalid video id"));
+    return next(new ApiError(400, "invalid video id"));
   }
+
   const { title, description, visibility } = req.body;
-  
-  let thumbnailLocalPath , newThumbnail , oldThumbnail;
+
+  let playlistIds = [];
+  playlistIds = JSON.parse(req.body.playlistIds || "[]");
+
+  // get local path of thumbnail, get old thumbnail public id for deletion
+  let thumbnailLocalPath, newThumbnail, oldThumbnail;
 
   const pipeline = [
     {
@@ -233,35 +239,57 @@ const updateVideo = asyncHandler(async (req, res, next) => {
     },
     {
       $project: {
-        _id : 0,
+        _id: 0,
         thumbnail: 1,
-      }
-    }
+      },
+    },
   ];
+
   oldThumbnail = await Video.aggregate(pipeline);
-  if (req.file){
+
+  if (req.file) {
     thumbnailLocalPath = req.file?.path;
+    console.log("222 ", thumbnailLocalPath);
     newThumbnail = await uploadOnCloudinary(thumbnailLocalPath);
+
+    if (!newThumbnail) {
+      return next(
+        new ApiError(500, "something went wrong while uploading thumbnail")
+      );
+    }
+
+    // delete old thumbnail from cloudinary
+    console.log("529", oldThumbnail[0].thumbnail);
+    await deleteFromCloudinary(
+      oldThumbnail[0].thumbnail.split("/").pop().split(".")[0]
+    );
   }
-  if(!newThumbnail){
-    return next(new ApiError(400, "Failed to upload thumbnail"));
-  }
-  await deleteFromCloudinary(oldThumbnail[0].thumbnail.split("/").pop().split(".")[0]);
+
   const isPublished = visibility === "public" ? true : false;
-    const updatedVideo = await Video.updateOne(
-      {_id: new mongoose.Types.ObjectId(videoId)},{
+
+  const updatedVideo = await Video.findByIdAndUpdate(
+    videoId,
+    {
       $set: {
         title,
         description,
-        thumbnail: newThumbnail.url,
+        thumbnail: newThumbnail?.url,
         isPublished,
       },
-    }
-,{new :true});
-  if(!updatedVideo){
-    return next(new ApiError(500, `video with id ${videoId} not found`));
+    },
+    { new: true }
+  );
+
+  if (!updatedVideo) {
+    return next(new ApiError(500, `video with id ${videoId} does not exist`));
   }
-  res.status(200).json(new ApiResponse(200, "Video updated successfully"));
+
+
+  res
+    .status(200)
+    .json(
+      new ApiResponse(200, updatedVideo, "Video details updated successfully")
+    );
 });
 
 const getPublishedVideosByChannel = asyncHandler(async (req, res, next) => {
@@ -312,15 +340,18 @@ const getPublishedVideosByChannel = asyncHandler(async (req, res, next) => {
       thumbnail: 1,
       title: 1,
       duration: 1,
+      isPublished: 1,
+      description: 1,
       views: 1,
       createdAt: 1,
       updatedAt: 1,
+      owner: 1,
     },
   });
 
   const videos = await Video.aggregate(pipeline);
 
-  console.log("videos", videos);
+  
 
   if (!videos) {
     return next(new ApiError("user does not exist in the DB"));

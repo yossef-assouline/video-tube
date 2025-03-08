@@ -320,7 +320,7 @@ const updateUserCoverImage = asyncHandler(async (req, res, next) => {
     );
 });
 const getUserChannelProfile = asyncHandler(async (req, res, next) => {
-  console.log("channel profile , ", req.params.username);
+
 
   const { username } = req.params;
   if (!username?.trim()) {
@@ -383,7 +383,7 @@ const getUserChannelProfile = asyncHandler(async (req, res, next) => {
       },
     },
   ]);
-  console.log(channel);
+  
   if (!channel?.length) {
     throw new ApiError(404, "Channel not found");
   }

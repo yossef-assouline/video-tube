@@ -15,10 +15,10 @@ export default function LoginForm() {
     const email = formData.get("email");
     const password = formData.get("password");
     try {
-      login(email, password);
-      if(!error){
+      await login(email, password);
+
         toast.success("Login successful");
-      }
+      
     } catch (error) {
       console.error("Login failed:", error.response?.data || error.message);
     }

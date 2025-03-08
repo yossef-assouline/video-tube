@@ -5,8 +5,10 @@ import { useAuthStore } from '../store/authStore';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import UploadVideoModal from './UploadVideoModal';
+import { useParams } from 'next/navigation';
 
 export default function NavBar() {
+  const { username } = useParams();
   const { user, isAuthenticated, logout, checkAuth } = useAuthStore();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -142,6 +144,12 @@ export default function NavBar() {
                         My Channel
                       </Link>
                     )}
+                    <Link
+                      href={`/dashboard/${username}`}
+                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      Dashboard
+                    </Link>
                     <button
                       onClick={handleLogout}
                       className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
