@@ -44,7 +44,7 @@ export default function NavBar() {
         <div className="flex justify-between items-center h-16">
           {/* Left side - Logo */}
           <div className="flex-shrink-0">
-            <Link href="/" className="text-xl font-bold text-gray-800">
+            <Link href="/home" className="text-xl font-bold text-gray-800">
               VidTube
             </Link>
           </div>
@@ -145,7 +145,7 @@ export default function NavBar() {
                       </Link>
                     )}
                     <Link
-                      href={`/dashboard/${username}`}
+                      href={`/dashboard/${user.username}`}
                       className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     >
                       Dashboard

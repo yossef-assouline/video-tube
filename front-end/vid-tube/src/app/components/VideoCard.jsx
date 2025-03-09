@@ -3,7 +3,7 @@ import { formatDuration } from '../utils/formatDuration';
 
 export default function VideoCard({ video, onClick }) {
   return (
-    <div className="video-card">
+    <div className="video-card h-60 w-60">
       <div className='relative'>
         <Image 
           src={video.thumbnail} 
@@ -13,7 +13,7 @@ export default function VideoCard({ video, onClick }) {
           height={250} 
           onClick={() => onClick(video._id)}
         />
-        <span className="absolute bottom-2 left-52  bg-black bg-opacity-70 text-white px-2 py-1 rounded text-sm">
+        <span className="absolute bottom-2 left-48  bg-black bg-opacity-70 text-white px-2 py-1 rounded text-sm">
           {formatDuration(video.duration)}
         </span>
       </div>
