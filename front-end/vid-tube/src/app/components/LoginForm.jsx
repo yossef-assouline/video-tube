@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import Spinner from "./Spinner";
 import Link from "next/link";
 export default function LoginForm() {
-  const { login, isLoading, error, user, isAuthenticated } = useAuthStore();
+  const { login, isLoading } = useAuthStore();
   const router = useRouter();
 
   const handleSubmit = async (e) => {
@@ -53,13 +53,20 @@ export default function LoginForm() {
             required
           />
         </div>
-
+        
         <button
-          type="submit"
-          className="w-full rounded-md bg-emerald-500 hover:bg-emerald-600 px-4 py-2 text-white"
-        >
-          {isLoading ? <Spinner /> : "Login"}
-        </button>
+            type="submit"
+            className="w-full rounded-md bg-emerald-500 hover:bg-emerald-600 px-4 py-2 text-white"
+            
+          >
+            {isLoading ? (
+              <div className="flex items-center justify-center">
+                <div className="h-6 w-6 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+              </div>
+            ) : (
+              "Login"
+            )}
+          </button>
       </form>
       <p className="text-center text-sm mt-2">
         Don't have an account?{" "}

@@ -21,7 +21,7 @@ export default function Home() {
         {!isAuthenticated ? (
         <LoginForm user={user} />
       ) : (
-        redirect('/profile')
+        redirect('/home')
       )}
     </div>
   );

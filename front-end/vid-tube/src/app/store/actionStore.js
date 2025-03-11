@@ -11,6 +11,7 @@ export const useActionStore = create((set) => ({
   isLoading: false,
   isFetchingVideos: false,
   videos: [],
+  AllVideos: [],
   error: null,
   video: null,
   toggleSubscribeLoading : false,
@@ -99,7 +100,7 @@ export const useActionStore = create((set) => ({
     set({ isFetchingVideos: true, error: null });
     try {
       const response = await axios.get(VIDEO_API_URL);
-      set({ isFetchingVideos: false, error: null, videos: response.data.data });
+      set({ isFetchingVideos: false, error: null, AllVideos: response.data.data });
     } catch (error) {
       set({
         error: error.response?.data?.message || "Error fetching videos",
