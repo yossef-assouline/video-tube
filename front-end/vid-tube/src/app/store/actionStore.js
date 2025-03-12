@@ -18,7 +18,9 @@ export const useActionStore = create((set) => ({
   toggleLikeLoading : false,
   comments: [],
   commentLoading: false,
-
+  subscribedChannels: [],
+  watchHistory: [],
+  likedVideos: [],
   findChannel: async (username) => {
     set({ isLoading: true, error: null });
     try {
@@ -206,6 +208,30 @@ export const useActionStore = create((set) => ({
       return null;
     }
   },
+  getSubscribedChannels: async (userId) => {
+    try {
+      const response = await axios.get(`${SUBSCRIPTION_API_URL}/s/${userId}`);
+      set({ subscribedChannels: response.data.data.subscribedChannels  });
+
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Error fetching subscribed channels",
+      });
+      return null;
+    }
+  },
+  getWatchHistory: async () => {
+    try {
+      const response = await axios.get(`${USER_API_URL}/history`);
+      set({ watchHistory: response.data.data });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Error fetching watch history",
+      });
+      return null;
+    }
+  },
+  
   toggleCommentLike: async (commentId) => {
     try {
       
@@ -218,6 +244,16 @@ export const useActionStore = create((set) => ({
       });
       throw error;
     }
+  },
+  getLikedVideos: async () => {
+    try {
+      const response = await axios.get(`${LIKE_API_URL}/videos`);
+      set({ likedVideos: response.data.data });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Error fetching liked videos",
+      });
+      return null;
+    }
   }
-  
 }));

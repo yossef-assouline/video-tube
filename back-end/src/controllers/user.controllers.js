@@ -394,19 +394,39 @@ const getUserChannelProfile = asyncHandler(async (req, res, next) => {
     );
 });
 const getWatchHistory = asyncHandler(async (req, res, next) => {
-  const user = await User.aggregate([
+  const newPipeline = [
     {
       $match: {
-        _id: new mongoose.Types.ObjectId(req.user?._id),
+        _id: req.user._id,
+      },
+    },
+    {
+      $project: {
+        _id: 0,
+        watchHistory: {
+          $ifNull: ["$watchHistory", []],
+        },
       },
     },
     {
       $lookup: {
         from: "videos",
-        localField: "watchHistory",
-        foreignField: "_id",
-        as: "watchHistory",
+        let: { watchHistoryIds: "$watchHistory" },
         pipeline: [
+          {
+            $match: {
+              $expr: {
+                $in: ["$_id", "$$watchHistoryIds"],
+              },
+            },
+          },
+          {
+            $addFields: {
+              customOrder: {
+                $indexOfArray: ["$$watchHistoryIds", "$_id"],
+              },
+            },
+          },
           {
             $lookup: {
               from: "users",
@@ -416,8 +436,8 @@ const getWatchHistory = asyncHandler(async (req, res, next) => {
               pipeline: [
                 {
                   $project: {
-                    fullname: 1,
-                    username: 1,
+                    userName: 1,
+                    fullName: 1,
                     avatar: 1,
                   },
                 },
@@ -431,20 +451,36 @@ const getWatchHistory = asyncHandler(async (req, res, next) => {
               },
             },
           },
+          {
+            $sort: {
+              customOrder: 1, // Sort by the custom index to preserve the order
+            },
+          },
         ],
+        as: "watchHistory",
       },
     },
-  ]);
-  return res
+  ];
+
+  const user = await User.aggregate(newPipeline);
+  // console.log(user)
+
+  if (!user) {
+    return next(new ApiError(401, "unauthorized access"));
+  }
+
+  res
     .status(200)
     .json(
       new ApiResponse(
         200,
-        user[0]?.watchHistory,
-        "Watch history fetched successfully"
+        user[0].watchHistory,
+        "watch history fetched successfully"
       )
     );
 });
+
+
 export {
   registerUser,
   findUser,

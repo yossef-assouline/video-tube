@@ -3,62 +3,62 @@ import { formatDuration } from '../utils/formatDuration';
 import { formatTimeAgo } from '../utils/formatTimeAgo';
 import { useRouter } from 'next/navigation';
 
-export default function VideoCard({ video, onClick }) {
+export default function PublicVideoCard({ video, onClick }) {
   const router = useRouter();
 
+  // Handle both nested and direct video objects
+  const videoData = video.video || video;
+  const owner = videoData.ownerDetails?.[0] || videoData.owner;
+
   return (
-    <div className="video-card mb-4">
+    <div className="video-card">
       <div className='relative'>
         <Image 
-          src={video.thumbnail} 
-          alt={video.title} 
-          className='aspect-video cursor-pointer hover:opacity-90 hover:ring-2 hover:ring-slate-500 transition-all duration-300 object-cover rounded-xl' 
+          src={videoData.thumbnail} 
+          alt={`Thumbnail for ${videoData.title}`}
+          className='aspect-video cursor-pointer hover:opacity-90 hover:ring-2 hover:ring-slate-500 transition-all duration-300 object-cover rounded-md' 
           width={400} 
-          height={500} 
-          onClick={() => onClick(video._id)}
+          height={250} 
+          onClick={() => onClick(videoData._id)}
         />
-        <span className="absolute bottom-2 right-2 bg-black bg-opacity-70 text-white px-2 py-1 rounded text-sm">
-          {formatDuration(video.duration)}
+        <span className="absolute bottom-2 right-2 bg-black bg-opacity-80 text-white px-2 py-1 rounded text-xs">
+          {formatDuration(videoData.duration)}
         </span>
       </div>
-
       <div className="flex gap-3 mt-3">
-        {/* Channel Avatar */}
-        <div 
-          className="flex-shrink-0 cursor-pointer"
-          onClick={() => router.push(`/c/${video.owner.username}`)}
-        >
-          <Image
-            src={video.ownerDetails[0].avatar}
-            alt={video.ownerDetails[0].username}
-            width={36}
-            height={36}
-            className="rounded-full object-cover aspect-square hover:opacity-90"
-          />
-        </div>
-
-        {/* Video Details */}
+        {owner && (
+          <div 
+            className="flex-shrink-0 cursor-pointer"
+            onClick={() => router.push(`/c/${owner.username}`)}
+          >
+            <Image
+              src={owner.avatar}
+              alt={`${owner.fullname || owner.username}'s channel avatar`}
+              width={36}
+              height={36}
+              className="rounded-full hover:opacity-90 object-cover aspect-square"
+            />
+          </div>
+        )}
         <div className="flex flex-col">
           <h3 
             className='font-medium text-sm line-clamp-2 cursor-pointer hover:text-blue-500'
-            onClick={() => onClick(video._id)}
+            onClick={() => onClick(videoData._id)}
           >
-            {video.title}
+            {videoData.title}
           </h3>
-          
-          <div className="flex flex-col text-[13px] text-gray-500">
+          {owner && (
             <span 
-              className="hover:text-gray-700 cursor-pointer"
-              onClick={() => router.push(`/c/${video.owner.username}`)}
+              className="text-sm text-gray-500 hover:text-gray-700 cursor-pointer"
+              onClick={() => router.push(`/c/${owner.username}`)}
             >
-              {video.ownerDetails[0].fullName || video.ownerDetails[0].username}
+              {owner.fullname || owner.username}
             </span>
-            
-            <div className="flex items-center">
-              <span>{video.views.toLocaleString()} views</span>
-              <span className="mx-1">•</span>
-              <span>{formatTimeAgo(new Date(video.createdAt))}</span>
-            </div>
+          )}
+          <div className="flex items-center text-sm text-gray-500">
+            <span>{videoData.views.toLocaleString()} views</span>
+            <span className="mx-1">•</span>
+            <span>{formatTimeAgo(new Date(videoData.createdAt))}</span>
           </div>
         </div>
       </div>

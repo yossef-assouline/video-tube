@@ -201,7 +201,36 @@ const getVideoById = asyncHandler(async (req, res, next) => {
     },
   ];
   video = await Video.aggregate(pipeline);
-  
+  const currentWatchHistory = req.user.watchHistory;
+  // console.log({ currentWatchHistory });
+
+  const index = currentWatchHistory?.findIndex(
+    (history) => history.toString() === videoId
+  );
+  if (index > -1) {
+    currentWatchHistory?.splice(index, 1);
+  }
+
+  currentWatchHistory?.unshift(videoId);
+
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $set: {
+        watchHistory: currentWatchHistory,
+      },
+    },
+    { new: true }
+  );
+
+  if (!updatedUser) {
+    return next(
+      new ApiError(
+        500,
+        "something went wrong while updating users watch history"
+      )
+    );
+  }
   res
     .status(200)
     .json(
