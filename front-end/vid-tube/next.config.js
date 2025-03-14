@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone', // Change back from 'export'
+  output: 'standalone',
   images: {
     domains: [
       'localhost',
