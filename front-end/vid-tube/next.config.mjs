@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
+  output: 'export',  // Changed from 'standalone' to 'export'
   images: {
+    unoptimized: true,  // Add this for static export
     domains: [
       'localhost',
       'video-tube-d2lw.onrender.com',
@@ -11,6 +12,6 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
   }
-};
+}
 
-export default nextConfig;
+module.exports = nextConfig 
