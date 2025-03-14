@@ -26,9 +26,9 @@ export default function ChannelPage() {
     subscribedChannels
   } = useActionStore();
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1280);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  // Handle window resize
+
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
@@ -36,7 +36,7 @@ export default function ChannelPage() {
       setIsSidebarOpen(width >= 1280);
     };
     
-    handleResize(); // Initial check
+    handleResize();
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);

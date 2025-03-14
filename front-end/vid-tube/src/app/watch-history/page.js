@@ -14,7 +14,7 @@ export default function WatchHistoryPage() {
   const { getSubscribedChannels, subscribedChannels, getWatchHistory , watchHistory} = useActionStore();
   const { user } = useAuthStore();
   const [isLoading, setIsLoading] = useState(true);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1280);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
   // Initial fetch
@@ -32,16 +32,22 @@ export default function WatchHistoryPage() {
     console.log(watchHistory)
   }, [watchHistory]);
 
-  // Handle window resize
+  // Handle window resize safely with useEffect
   useEffect(() => {
+    // Now it's safe to access window
     const handleResize = () => {
       const width = window.innerWidth;
       setIsMobile(width < 1024);
       setIsSidebarOpen(width >= 1280);
     };
     
+    // Initial check
     handleResize();
+    
+    // Add event listener
     window.addEventListener('resize', handleResize);
+    
+    // Cleanup
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
