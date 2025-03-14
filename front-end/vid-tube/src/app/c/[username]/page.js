@@ -9,6 +9,8 @@ import VideoCard from '../../components/VideoCard.jsx';
 import ChannelHeader from '../../components/ChannelHeader.jsx';
 import VideosGrid from '../../components/VideosGrid.jsx';
 import Spinner from '@/app/components/Spinner.jsx';
+import Sidebar from '@/app/components/Sidebar';
+import CollapsedSideBar from '@/app/components/CollapsedSideBar';
 
 export default function ChannelPage() {
   const { username } = useParams();
@@ -20,9 +22,24 @@ export default function ChannelPage() {
     error, 
     findChannel, 
     videos, 
-    toggleSubscribe 
+    toggleSubscribe ,
+    subscribedChannels
   } = useActionStore();
   const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1280);
+  const [isMobile, setIsMobile] = useState(false);
+  // Handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      setIsMobile(width < 1024);
+      setIsSidebarOpen(width >= 1280);
+    };
+    
+    handleResize(); // Initial check
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     findChannel(username);
@@ -38,36 +55,56 @@ export default function ChannelPage() {
     router.push(`/watch/${videoId}`);
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   if (isLoading) return <Spinner />;
   if (error) return <ErrorMessage message={error} />;
   if (!channelData) return null;
 
   return (
-    <>
-      <NavBar />
-      <div className="w-full">
-        <ChannelHeader 
-          channelData={channelData}
-          videos={videos}
-          isSubscribed={isSubscribed}
-          onSubscribe={() => {
-            toggleSubscribe(channelData._id);
-            setIsSubscribed(!isSubscribed);
-          }}
-          isOwnChannel={channelData.username === user?.username}
-        />
+    <div className="min-h-screen ">
+      <NavBar toggleSidebar={toggleSidebar} />
+      
+      <Sidebar 
+        user={user}
+        isOpen={isSidebarOpen}
+        isMobile={isMobile}
+        subscribedChannels={subscribedChannels}
+        onClose={() => setIsSidebarOpen(false)}
+      />
+      
 
-        <div className="max-w-6xl mx-auto px-4">
-          <VideosGrid 
-            videos={videos} 
-            onVideoClick={handleVideoClick} 
+      <div className={`
+         transition-all duration-300 "
+        
+      `}>
+        <div className="xl:w-full xl:flex xl:flex-col xl:items-center">
+        <div className="w-full md:max-w-6xl flex flex-col ">
+          <ChannelHeader 
+            channelData={channelData}
+            videos={videos}
+            isSubscribed={isSubscribed}
+            onSubscribe={() => {
+              toggleSubscribe(channelData._id);
+              setIsSubscribed(!isSubscribed);
+            }}
+            isOwnChannel={channelData.username === user?.username}
           />
+
+          <div className="w-full md:max-w-6xl mx-auto px-4">
+            <VideosGrid 
+              videos={videos} 
+              onVideoClick={handleVideoClick} 
+            />
+          </div>
+        </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
-
 
 const ErrorMessage = ({ message }) => (
   <div className="w-full h-screen flex items-center justify-center">

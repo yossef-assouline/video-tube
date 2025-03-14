@@ -14,10 +14,10 @@ export default function VideosGrid({ videos, onVideoClick }) {
   }
 
   return (
-    <div className="mt-8">
+    <div className="mt-8 w-full">
       <hr className='my-4 border-1 border-gray-300'/>
       <h2 className="text-2xl font-bold mb-4">Videos</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {videos.map((video) => (
           <VideoCard 
             key={video._id} 

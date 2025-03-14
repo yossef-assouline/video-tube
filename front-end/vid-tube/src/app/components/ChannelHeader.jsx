@@ -9,13 +9,13 @@ export default function ChannelHeader({
 }) {
   return (
     <>
-      <div className="relative w-full h-[200px] bg-gray-300 ">
+      <div className="relative w-full h-[200px] mt-6 ">
         <Image
           src={channelData.coverImage || "/default-banner.jpg"}
           alt="Channel Banner"
           layout="fill"
           objectFit="cover"
-          className="w-full h-full"
+          className="w-full h-full  rounded-xl "
         />
       </div>
 
@@ -25,7 +25,7 @@ export default function ChannelHeader({
             <Image
               src={channelData.avatar || "/default-avatar.jpg"}
               alt="Channel Avatar"
-              width={100}
+              width={120}
               height={100}
               className="rounded-full object-cover aspect-square"
             />

@@ -8,6 +8,7 @@ export const useAuthStore = create((set) => ({
   isLoading: false,
   isAuthenticated: false,
   error: null,
+  loginError: null,
 
   signup: async (formData) => {
     set({ isLoading: true, error: null });
@@ -30,9 +31,11 @@ export const useAuthStore = create((set) => ({
         email,
         password,
       });
-      set({ user: response.data.data, isAuthenticated: true, isLoading: false ,error: null });
+ 
+      set({ user: response.data.data, isAuthenticated: true, isLoading: false , loginError: null });
     } catch (error) {
-      set({ error: error.response?.data?.message || "Error logging in", isLoading: false });
+
+      set({ error: error.response?.data?.message || "Error logging in", isLoading: false , loginError: error.response?.data?.message || "Error logging in" });
     }
   },
   checkAuth: async () => {
