@@ -6,7 +6,10 @@ import cookieParser from "cookie-parser";
 const app = express();
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN,
+    origin: [
+      'http://localhost:3000',
+      'https://video-tube-1.onrender.com/', // Add your frontend URL when deployed
+    ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"]
