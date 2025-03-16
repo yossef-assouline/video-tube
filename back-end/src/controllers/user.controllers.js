@@ -147,9 +147,8 @@ const loginUser = asyncHandler(async (req, res, next) => {
     const options = {
       httpOnly: true,
       secure: true,
-      sameSite: 'None',
+      sameSite: 'none',
       path: '/',
-      maxAge: 24 * 60 * 60 * 1000  // 24 hours in milliseconds
     };
     return res
       .status(200)
@@ -246,17 +245,29 @@ const changePassword = asyncHandler(async (req, res, next) => {
 });
 
 const getCurrentUser = asyncHandler(async (req, res, next) => {
-  console.log("req.user", req.user);
-  res
-    .status(200)
-    .json(
-      new ApiResponse(
-        200,
-        req.user,
-        "current logged in user fetched successfully"
-      )
-    );
+  try {
+    // Get user from middleware
+    const user = req.user;
     
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Not authenticated"
+      });
+    }
+
+    // Return user data
+    return res.status(200).json({
+      success: true,
+      data: user
+    });
+  } catch (error) {
+    console.error("Check auth error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Error checking authentication"
+    });
+  }
 });
 
 const updateAccountDetails = asyncHandler(async (req, res, next) => {
