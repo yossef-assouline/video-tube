@@ -7,7 +7,16 @@ const VIDEO_API_URL = `${BASE_URL}/api/v1/videos`;
 const SUBSCRIPTION_API_URL = `${BASE_URL}/api/v1/subscriptions`;
 const LIKE_API_URL = `${BASE_URL}/api/v1/likes`;
 const COMMENT_API_URL = `${BASE_URL}/api/v1/comments`;
-axios.defaults.withCredentials = true;
+
+// First, create an axios instance with default config
+const api = axios.create({
+  baseURL: BASE_URL,
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
 export const useActionStore = create((set) => ({
   channelData: null,
   isLoading: false,
@@ -26,12 +35,13 @@ export const useActionStore = create((set) => ({
   findChannel: async (username) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.get(`${USER_API_URL}/c/${username}`);
+      const response = await axios.get(`${USER_API_URL}/c/${username}`, { withCredentials: true });
       const channelData = response.data.data;
 
       // Fetch videos immediately after getting channel data
       const videosResponse = await axios.get(
-        `${VIDEO_API_URL}/u/${channelData._id}/published`
+        `${VIDEO_API_URL}/u/${channelData._id}/published`,
+        { withCredentials: true }
       );
       set({
         channelData: channelData,
@@ -59,6 +69,7 @@ export const useActionStore = create((set) => ({
         headers: {
           "Content-Type": "multipart/form-data",
         },
+        withCredentials: true
       });
       set({ isLoading: false, error: null });
       return response.data.data;
@@ -70,10 +81,24 @@ export const useActionStore = create((set) => ({
       return null;
     }
   },
+  getVideoById: async (videoId) => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await axios.get(`${VIDEO_API_URL}/${videoId}`, { withCredentials: true });
+      set({ isLoading: false, error: null });
+      return response.data.data;
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Error fetching video",
+        isLoading: false,
+      });
+      return null;
+    }
+  },
   deleteVideo: async (videoId) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.delete(`${VIDEO_API_URL}/${videoId}`);
+      const response = await axios.delete(`${VIDEO_API_URL}/${videoId}`, { withCredentials: true });
       set({ isLoading: false, error: null });
       return response.data.data;
     } catch (error) {
@@ -90,6 +115,7 @@ export const useActionStore = create((set) => ({
         headers: {
           "Content-Type": "multipart/form-data",
         },
+        withCredentials: true
       });
       set({ isLoading: false, error: null });
       return response.data.data;  
@@ -103,7 +129,7 @@ export const useActionStore = create((set) => ({
   fetchAllVideos: async () => {
     set({ isFetchingVideos: true, error: null });
     try {
-      const response = await axios.get(VIDEO_API_URL);
+      const response = await axios.get(VIDEO_API_URL, { withCredentials: true });
       set({ isFetchingVideos: false, error: null, AllVideos: response.data.data });
     } catch (error) {
       set({
@@ -116,7 +142,9 @@ export const useActionStore = create((set) => ({
     set({ toggleSubscribeLoading: true, error: null });
     try {
       const response = await axios.post(
-        `${SUBSCRIPTION_API_URL}/c/${channelId}`
+        `${SUBSCRIPTION_API_URL}/c/${channelId}`,
+        {},
+        { withCredentials: true }
       );
       set({ isLoading: false, error: null });
       return response.data.data;
@@ -146,7 +174,11 @@ export const useActionStore = create((set) => ({
     
     set({ toggleLikeLoading: true, error: null });
     try {
-      const response = await axios.post(`${LIKE_API_URL}/toggle/v/${videoId}`);
+      const response = await axios.post(
+        `${LIKE_API_URL}/toggle/v/${videoId}`,
+        {},
+        { withCredentials: true }
+      );
       set({ isLoading: false, error: null });
       return response.data.data;
     } catch (error) {
@@ -160,7 +192,7 @@ export const useActionStore = create((set) => ({
   getVideoComments: async (videoId) => {
     set({ commentLoading: true, error: null });
     try {
-      const response = await axios.get(`${COMMENT_API_URL}/${videoId}`);
+      const response = await axios.get(`${COMMENT_API_URL}/${videoId}`, { withCredentials: true });
       set({ commentLoading: false, error: null, comments: response.data.data });
       return response.data.data;
     } catch (error) {
@@ -174,7 +206,11 @@ export const useActionStore = create((set) => ({
   postComment: async (videoId, comment) => {
     set({ commentLoading: true, error: null });
     try {
-      const response = await axios.post(`${COMMENT_API_URL}/${videoId}`, { comment });
+      const response = await axios.post(
+        `${COMMENT_API_URL}/${videoId}`,
+        { comment },
+        { withCredentials: true }
+      );
       set({ commentLoading: false, error: null });
     } catch (error) {
       set({
@@ -187,7 +223,7 @@ export const useActionStore = create((set) => ({
   deleteComment: async (commentId) => {
     set({ commentLoading: true, error: null });
     try {
-      const response = await axios.delete(`${COMMENT_API_URL}/c/${commentId}`);
+      const response = await axios.delete(`${COMMENT_API_URL}/c/${commentId}`, { withCredentials: true });
       set({ commentLoading: false, error: null });
     } catch (error) {
       set({
@@ -200,7 +236,11 @@ export const useActionStore = create((set) => ({
   updateComment: async (commentId, editedContent) => {
     set({ commentLoading: true, error: null });
     try {
-      const response = await axios.patch(`${COMMENT_API_URL}/c/${commentId}`, { updatedComment: editedContent });
+      const response = await axios.patch(
+        `${COMMENT_API_URL}/c/${commentId}`,
+        { updatedComment: editedContent },
+        { withCredentials: true }
+      );
       set({ commentLoading: false, error: null });
     } catch (error) {
       set({
@@ -212,7 +252,7 @@ export const useActionStore = create((set) => ({
   },
   getSubscribedChannels: async (userId) => {
     try {
-      const response = await axios.get(`${SUBSCRIPTION_API_URL}/s/${userId}`);
+      const response = await axios.get(`${SUBSCRIPTION_API_URL}/s/${userId}`, { withCredentials: true });
       set({ subscribedChannels: response.data.data.subscribedChannels  });
 
     } catch (error) {
@@ -224,7 +264,7 @@ export const useActionStore = create((set) => ({
   },
   getWatchHistory: async () => {
     try {
-      const response = await axios.get(`${USER_API_URL}/history`);
+      const response = await axios.get(`${USER_API_URL}/history`, { withCredentials: true });
       set({ watchHistory: response.data.data });
     } catch (error) {
       set({
@@ -236,7 +276,11 @@ export const useActionStore = create((set) => ({
   toggleCommentLike: async (commentId) => {
     try {
       
-      const response = await axios.post(`${LIKE_API_URL}/toggle/c/${commentId}`);
+      const response = await axios.post(
+        `${LIKE_API_URL}/toggle/c/${commentId}`,
+        {},
+        { withCredentials: true }
+      );
       
       return response.data;
     } catch (error) {
@@ -248,7 +292,7 @@ export const useActionStore = create((set) => ({
   },
   getLikedVideos: async () => {
     try {
-      const response = await axios.get(`${LIKE_API_URL}/videos`);
+      const response = await axios.get(`${LIKE_API_URL}/videos`, { withCredentials: true });
       set({ likedVideos: response.data.data });
     } catch (error) {
       set({
