@@ -15,7 +15,7 @@ const verifyJWT = asyncHandler(async (req, res, next) => {
     }
 
     // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
     
     // Attach user to request
     req.user = decoded;
@@ -24,7 +24,7 @@ const verifyJWT = asyncHandler(async (req, res, next) => {
     console.error("Token verification error:", error);
     
     // Clear invalid token
-    res.clearCookie('token', {
+    res.clearCookie('accessToken', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'none'
