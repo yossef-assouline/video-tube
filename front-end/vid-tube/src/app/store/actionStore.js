@@ -1,10 +1,12 @@
 import { create } from "zustand";
 import axios from "axios";
-const USER_API_URL = "http://localhost:7000/api/v1/users";
-const VIDEO_API_URL = "http://localhost:7000/api/v1/videos";
-const SUBSCRIPTION_API_URL = "http://localhost:7000/api/v1/subscriptions";
-const LIKE_API_URL = "http://localhost:7000/api/v1/likes";
-const COMMENT_API_URL = "http://localhost:7000/api/v1/comments";
+
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:7000";
+const USER_API_URL = `${BASE_URL}/api/v1/users`;
+const VIDEO_API_URL = `${BASE_URL}/api/v1/videos`;
+const SUBSCRIPTION_API_URL = `${BASE_URL}/api/v1/subscriptions`;
+const LIKE_API_URL = `${BASE_URL}/api/v1/likes`;
+const COMMENT_API_URL = `${BASE_URL}/api/v1/comments`;
 axios.defaults.withCredentials = true;
 export const useActionStore = create((set) => ({
   channelData: null,

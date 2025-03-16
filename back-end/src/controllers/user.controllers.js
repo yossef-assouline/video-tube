@@ -148,7 +148,6 @@ const loginUser = asyncHandler(async (req, res, next) => {
       httpOnly: true,
       secure: true,
       sameSite: 'None',
-      domain: process.env.NODE_ENV === "development" ? "localhost" : process.env.DOMAIN,
       path: '/',
       maxAge: 24 * 60 * 60 * 1000  // 24 hours in milliseconds
     };
@@ -179,7 +178,7 @@ const logoutUser = asyncHandler(async (req, res, next) => {
   );
   const options = {
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
   };
   return res
     .status(200)

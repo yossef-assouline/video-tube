@@ -4,14 +4,27 @@ import cookieParser from "cookie-parser";
 
 
 const app = express();
+const allowedOrigins = [
+  "video-tube-one.vercel.app",
+  "http://localhost:3000", // Add other allowed origins as necessary
+];
+
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN,
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
-    allowedHeaders: ["Content-Type", "Authorization"]
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
   })
 );
+
+app.options("*", cors());
 
 // common middleware
 app.use(express.json({ limit: "16kb" }));
