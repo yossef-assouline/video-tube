@@ -19,12 +19,10 @@ export default function NavBar({ toggleSidebar }) {
 
   const [showUploadModal, setShowUploadModal] = useState(false);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
+    // Only check auth once when component mounts
     checkAuth();
-  
-  }, [checkAuth]);
-  
+  }, []); // Empty dependency array
 
   const handleLogout = async () => {
     await logout();

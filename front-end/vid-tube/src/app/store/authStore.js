@@ -1,30 +1,22 @@
 import { create } from "zustand";
-import axios from "axios";
+import api from '../utils/axios';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:7000";
 
 const API_URL = `${BASE_URL}/api/v1/users`;
 
-// Create axios instance with default config
-const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL,
-  withCredentials: true,
-  headers: {
-    'Content-Type': 'application/json'
-  }
-});
-
 export const useAuthStore = create((set) => ({
   user: null,
-  isLoading: false,
   isAuthenticated: false,
-  error: null,
+  isLoading: false,
+  isCheckingAuth: true,
   loginError: null,
+  error: null,
 
   signup: async (formData) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.post(`${API_URL}/register`, formData, {
+      const response = await api.post('/api/v1/users/register', formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -41,10 +33,22 @@ export const useAuthStore = create((set) => ({
     try {
       const response = await api.post('/api/v1/users/login', {
         email,
-        password,
+        password
       });
-      set({ user: response.data.data, isAuthenticated: true, isLoading: false, loginError: null });
+      
+      set({ 
+        user: response.data.data, 
+        isAuthenticated: true, 
+        isLoading: false, 
+        loginError: null 
+      });
     } catch (error) {
+      console.error('Login Error:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status
+      });
+      
       set({ 
         error: error.response?.data?.message || "Error logging in", 
         isLoading: false, 
@@ -55,25 +59,61 @@ export const useAuthStore = create((set) => ({
 
   checkAuth: async () => {
     try {
-      const response = await axios.get(`${API_URL}/current-user`, { withCredentials: true });
-      set({ user: response.data.data, isAuthenticated: true, isLoading: false, error: null });
+      const response = await api.get('/api/v1/users/current-user');
+      if (response.data.data) {
+        set({ 
+          user: response.data.data, 
+          isAuthenticated: true, 
+          isCheckingAuth: false,
+          error: null 
+        });
+      } else {
+        set({ 
+          user: null, 
+          isAuthenticated: false, 
+          isCheckingAuth: false,
+          error: null 
+        });
+      }
     } catch (error) {
-      set({ isAuthenticated: false, isLoading: false, error: error.response?.data?.message || "Error checking authentication" });
+      console.error('CheckAuth Error:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status
+      });
+      
+      set({ 
+        user: null,
+        isAuthenticated: false, 
+        isCheckingAuth: false,
+        error: error.response?.data?.message || "Error checking authentication" 
+      });
     }
   },
 
   logout: async () => {
     try {
-      await axios.post(`${API_URL}/logout`, {}, { withCredentials: true });
-      set({ user: null, isAuthenticated: false, isLoading: false });
+      await api.post('/api/v1/users/logout');
+      set({ 
+        user: null, 
+        isAuthenticated: false, 
+        isLoading: false,
+        loginError: null,
+        error: null 
+      });
+      window.location.href = '/';
     } catch (error) {
-      console.error("Error logging out:", error);
+      console.error('Logout Error:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status
+      });
     }
   },
 
   changePassword: async (newPassword, oldPassword) => {
     try {
-      await axios.put(`${API_URL}/change-password`, 
+      await api.put('/api/v1/users/change-password', 
         { newPassword, oldPassword }, 
         { withCredentials: true }
       );
@@ -85,7 +125,7 @@ export const useAuthStore = create((set) => ({
   updateProfile: async (formData) => {
     set({ isLoading: true, error: null });
     try {
-      await axios.put(`${API_URL}/update-account`, 
+      await api.put('/api/v1/users/update-account', 
         formData, 
         { withCredentials: true }
       );
@@ -98,7 +138,7 @@ export const useAuthStore = create((set) => ({
   updateAvatar: async (formData) => {
     set({ isLoading: true, error: null });
     try {
-      await axios.patch(`${API_URL}/update-avatar`, 
+      await api.patch('/api/v1/users/update-avatar', 
         formData, 
         {
           headers: {
@@ -116,7 +156,7 @@ export const useAuthStore = create((set) => ({
   updateCoverImage: async (formData) => {
     set({ isLoading: true, error: null });
     try {
-      await axios.patch(`${API_URL}/update-cover-image`, 
+      await api.patch('/api/v1/users/update-cover-image', 
         formData, 
         {
           headers: {
