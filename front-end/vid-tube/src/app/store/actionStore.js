@@ -84,8 +84,8 @@ export const useActionStore = create((set) => ({
   getVideoById: async (videoId) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.get(`${VIDEO_API_URL}/${videoId}`, { withCredentials: true });
-      set({ isLoading: false, error: null });
+      const response = await axios.get(`${VIDEO_API_URL}/${videoId}`);
+      set({ isLoading: false, error: null, video: response.data.data });
       return response.data.data;
     } catch (error) {
       set({

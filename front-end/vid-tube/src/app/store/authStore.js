@@ -12,6 +12,7 @@ export const useAuthStore = create((set) => ({
   isCheckingAuth: true,
   loginError: null,
   error: null,
+  loggedInUser: null,
 
   signup: async (formData) => {
     set({ isLoading: true, error: null });
@@ -37,7 +38,7 @@ export const useAuthStore = create((set) => ({
       });
       
       set({ 
-        user: response.data.data, 
+        user: response.data.data.user, 
         isAuthenticated: true, 
         isLoading: false, 
         loginError: null 
@@ -62,14 +63,14 @@ export const useAuthStore = create((set) => ({
       const response = await api.get('/api/v1/users/current-user');
       if (response.data.data) {
         set({ 
-          user: response.data.data, 
+          loggedInUser: response.data.data, 
           isAuthenticated: true, 
           isCheckingAuth: false,
           error: null 
         });
       } else {
         set({ 
-          user: null, 
+          loggedInUser: null, 
           isAuthenticated: false, 
           isCheckingAuth: false,
           error: null 
@@ -83,7 +84,7 @@ export const useAuthStore = create((set) => ({
       });
       
       set({ 
-        user: null,
+        loggedInUser: null,
         isAuthenticated: false, 
         isCheckingAuth: false,
         error: error.response?.data?.message || "Error checking authentication" 
