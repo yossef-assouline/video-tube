@@ -9,6 +9,7 @@ import Spinner from '../components/Spinner';
 import { useAuthStore } from '../store/authStore';
 import PublicVideoCard from '../components/PublicVideoCard';
 import CollapsedSideBar from '../components/CollapsedSideBar';
+
 export default function HomePage() {
   const router = useRouter();
   const { AllVideos, isFetchingVideos, fetchAllVideos, getSubscribedChannels, subscribedChannels } = useActionStore();
@@ -18,7 +19,7 @@ export default function HomePage() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const loader = useRef(null);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1280);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
   // Initial fetch
@@ -78,12 +79,11 @@ export default function HomePage() {
     const handleResize = () => {
       const width = window.innerWidth;
       setIsMobile(width < 1024);
-      setIsSidebarOpen(width >= 1280); // Set sidebar state based on xl breakpoint
+      setIsSidebarOpen(width >= 1280);
     };
     
-    handleResize(); // Initial check
+    handleResize();
     window.addEventListener('resize', handleResize);
-    
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 

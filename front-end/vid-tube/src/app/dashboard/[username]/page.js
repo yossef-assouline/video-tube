@@ -20,6 +20,20 @@ export default function DashboardPage() {
   const [videoToDelete, setVideoToDelete] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [videoToEdit, setVideoToEdit] = useState(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      setIsMobile(width < 1024);
+      setIsSidebarOpen(width >= 1280);
+    };
+    
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // First check authentication
   useEffect(() => {

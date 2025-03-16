@@ -14,7 +14,7 @@ export default function LikedVideosPage() {
   const { getSubscribedChannels, subscribedChannels, getLikedVideos, likedVideos } = useActionStore();
   const { user } = useAuthStore();
   const [isLoading, setIsLoading] = useState(true);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 1280);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
   // Initial fetch
