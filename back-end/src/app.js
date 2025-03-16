@@ -4,48 +4,17 @@ import cookieParser from "cookie-parser";
 
 
 const app = express();
-const allowedOrigins = [
-  "https://video-tube-one.vercel.app",
-  "https://video-tube-git-main-yossef-assoulines-projects.vercel.app",
-  "https://video-tube-atsy4mofq-yossef-assoulines-projects.vercel.app",
-  "http://localhost:3000", // Add other allowed origins as necessary
-];
 
+// CORS Configuration - Place this BEFORE any routes
 app.use(cors({
-  origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.indexOf(origin) === -1) {
-      return callback(new Error('CORS not allowed'), false);
-    }
-    return callback(null, true);
-  },
+  origin: true, // Allow all origins temporarily for testing
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'x-auth-token']
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-app.options('*', (req, res) => {
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-auth-token');
-    res.setHeader('Access-Control-Allow-Credentials', 'true');
-  }
-  res.sendStatus(200);
-});
-
-// Add this middleware for all routes
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.header('Access-Control-Allow-Origin', origin);
-    res.header('Access-Control-Allow-Credentials', 'true');
-  }
-  next();
-});
+// Pre-flight requests
+app.options('*', cors());
 
 // common middleware
 app.use(express.json({ limit: "16kb" }));

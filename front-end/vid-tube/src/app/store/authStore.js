@@ -7,7 +7,7 @@ const API_URL = `${BASE_URL}/api/v1/users`;
 
 // Create axios instance with default config
 const api = axios.create({
-  baseURL: BASE_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json'
@@ -39,14 +39,17 @@ export const useAuthStore = create((set) => ({
   login: async (email, password) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.post(`${API_URL}/login`, {
+      const response = await api.post('/api/v1/users/login', {
         email,
         password,
-      }, { withCredentials: true });
- 
+      });
       set({ user: response.data.data, isAuthenticated: true, isLoading: false, loginError: null });
     } catch (error) {
-      set({ error: error.response?.data?.message || "Error logging in", isLoading: false, loginError: error.response?.data?.message || "Error logging in" });
+      set({ 
+        error: error.response?.data?.message || "Error logging in", 
+        isLoading: false, 
+        loginError: error.response?.data?.message || "Error logging in" 
+      });
     }
   },
 
