@@ -1,10 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  // Remove the output: 'export' line
   images: {
-    unoptimized: true,
     domains: [
-      'localhost',
       'video-tube-d2lw.onrender.com',
       'res.cloudinary.com'
     ],
@@ -14,5 +12,4 @@ const nextConfig = {
   }
 }
 
-
-export default nextConfig;
+module.exports = nextConfig
