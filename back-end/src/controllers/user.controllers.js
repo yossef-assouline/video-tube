@@ -149,6 +149,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
       secure: true,
       sameSite: 'none',
       path: '/',
+      domain: process.env.NODE_ENV === "production" ? process.env.DOMAIN : "localhost:3000"
     };
     return res
       .status(200)
