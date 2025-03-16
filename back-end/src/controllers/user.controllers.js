@@ -144,12 +144,10 @@ const loginUser = asyncHandler(async (req, res, next) => {
       throw new ApiError(500, "Something went wrong while logging in user");
     }
     //set refresh token in cookie
-    const options = {
+    const cookieOptions = {
       httpOnly: true,
       secure: true,
-      sameSite: 'none',
-      path: '/',
-      domain: process.env.NODE_ENV === "production" ? process.env.DOMAIN : "localhost:3000"
+      sameSite: "None", // Allow cross-origin cookies
     };
     return res
       .status(200)
