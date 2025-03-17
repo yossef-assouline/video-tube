@@ -10,7 +10,7 @@ app.use(cookieParser());
 app.use(cors({
   origin: [
     'http://localhost:3000',
-    'https://video-tube-one.vercel.app/'
+    'video-tube-one.vercel.app'
   ],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
