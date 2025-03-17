@@ -10,4 +10,22 @@ const storage = multer.diskStorage({
   },
 });
 
-export const upload = multer({ storage });
+const fileFilter = (req, file, cb) => {
+  // Accept jpg, jpeg, png, gif
+  if (file.mimetype === 'image/jpeg' || 
+      file.mimetype === 'image/jpg' || 
+      file.mimetype === 'image/png' || 
+      file.mimetype === 'image/gif') {
+    cb(null, true);
+  } else {
+    cb(new Error('Unsupported file type'), false);
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: { fileSize: 1024 * 1024 * 5 } // 5MB limit
+});
+
+export { upload };

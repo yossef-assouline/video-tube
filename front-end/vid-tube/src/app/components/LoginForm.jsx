@@ -24,7 +24,7 @@ export default function LoginForm() {
 
   return (
     <div className="flex justify-center items-center h-screen flex-col">
-      <h1 className="text-2xl font-bold mb-4">Login</h1>
+      <h1 className="text-2xl font-bold mb-4 dark:text-black">Login</h1>
       <form onSubmit={handleSubmit} className="space-y-4 w-2/3 max-w-md">
         {loginError && (
           <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-4">
@@ -44,27 +44,27 @@ export default function LoginForm() {
         )}
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium">
+          <label htmlFor="email" className="block text-sm font-medium dark:text-black">
             Email Address
           </label>
           <input
             type="email"
             id="email"
             name="email"
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+            className="mt-1 block w-full rounded-md border-2 border-black   px-3 py-2 dar dark:bg-gray-700 dark:border-gray-600 dark:text-white"
             required
           />
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-medium">
+          <label htmlFor="password" className="block text-sm font-medium dark:text-black">
             Password
           </label>
           <input
             type="password"
             id="password"
             name="password"
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+            className="mt-1 block w-full rounded-md border-2 border-black  px-3 py-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white"
             required
           />
         </div>
@@ -83,7 +83,7 @@ export default function LoginForm() {
           )}
         </button>
       </form>
-      <p className="text-center text-sm mt-2">
+      <p className="text-center text-sm mt-2 dark:text-black">
         Don't have an account?{" "}
         <Link href="/register">
           <span className="text-emerald-500 hover:underline">Sign up</span>

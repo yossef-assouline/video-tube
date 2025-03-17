@@ -13,7 +13,7 @@ export default function Register() {
   const router = useRouter();
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-24">
+    <div className="flex min-h-screen flex-col dark:bg-white dark:text-black items-center justify-center p-24">
       <form onSubmit={async (e) => {
         
         e.preventDefault();
@@ -36,7 +36,7 @@ export default function Register() {
             type="text"
             id="fullname"
             name="fullname"
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 "
+            className="mt-1 block w-full rounded-md border-2 border-black  dark:bg-gray-300 dark:border-gray-600 px-3 py-2 "
             required
           />
         </div>
@@ -49,7 +49,7 @@ export default function Register() {
             type="text"
             id="username"
             name="username"
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+            className="mt-1 block w-full rounded-md border-2 border-black  dark:bg-gray-300 dark:border-gray-600 px-3 py-2"
             required
           />
         </div>
@@ -62,7 +62,7 @@ export default function Register() {
             type="email"
             id="email"
             name="email" 
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+            className="mt-1 block w-full rounded-md border-2 border-black   dark:bg-gray-300 dark:border-gray-600 px-3 py-2"
             required
           />
         </div>
@@ -75,7 +75,7 @@ export default function Register() {
             type="password"
             id="password"
             name="password"
-            className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2"
+            className="mt-1 block w-full rounded-md border-2 border-black  dark:bg-gray-300 dark:border-gray-600 px-3 py-2"
             required
           />
         </div>
@@ -90,7 +90,7 @@ export default function Register() {
             accept="image/*"
           
            
-            required className="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm text-gray-400 file:border-0 file:bg-transparent file:text-gray-600 file:text-sm file:font-medium"/>
+            required className="flex h-10 w-full rounded-md border-2 border-black  dark:bg-gray-300 dark:border-gray-600 px-3 py-2 text-sm text-gray-400 file:border-0 file:bg-transparent file:text-gray-600 file:text-sm file:font-medium"/>
 
         
          
@@ -105,7 +105,7 @@ export default function Register() {
             name="coverImage"
             accept="image/*"
            
-            required className="flex h-10 w-full rounded-md border border-input bg-white px-3 py-2 text-sm text-gray-400 file:border-0 file:bg-transparent file:text-gray-600 file:text-sm file:font-medium"/>
+            required className="flex h-10 w-full rounded-md border-2 border-black  dark:bg-gray-300 dark:border-gray-600 px-3 py-2 text-sm text-gray-400 file:border-0 file:bg-transparent file:text-gray-600 file:text-sm file:font-medium"/>
 
         </div>
         
