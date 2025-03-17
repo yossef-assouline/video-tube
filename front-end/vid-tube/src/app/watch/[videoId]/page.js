@@ -14,13 +14,13 @@ import SuggestedVideos from "../../components/SuggestedVideos.jsx";
 
 export default function WatchPage() {
   const { videoId } = useParams();
-  const { user } = useAuthStore();
+  const { loggedInUser } = useAuthStore();
   const { getVideoById, video, isLoading } = useActionStore();
   const [isSubscribed, setIsSubscribed] = useState(false);
 
   useEffect(() => {
     getVideoById(videoId);
-  }, [videoId, getVideoById]);
+  }, [videoId]);
 
   useEffect(() => {
     if (video?.isSubscribed === true) {
@@ -40,7 +40,7 @@ export default function WatchPage() {
             <VideoPlayer video={video} />
             <VideoInfo 
               video={video} 
-              user={user} 
+              user={loggedInUser} 
               isSubscribed={isSubscribed}
               setIsSubscribed={setIsSubscribed}
             />

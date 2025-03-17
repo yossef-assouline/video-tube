@@ -84,10 +84,10 @@ export const useActionStore = create((set) => ({
   getVideoById: async (videoId) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await api.get(`/api/v1/videos/${videoId}`, {
-        withCredentials: true  // Ensure credentials are sent
-      });
+      const response = await axios.get(`${VIDEO_API_URL}/${videoId}`);
+
       set({ isLoading: false, error: null, video: response.data.data });
+      console.log("response", response.data.data)
       return response.data.data;
     } catch (error) {
       set({
@@ -140,6 +140,19 @@ export const useActionStore = create((set) => ({
       });
     }
   },  
+  getVideoById: async (videoId) => {
+    set({ isLoading: true, error: null });
+    try {
+      const response = await axios.get(`${VIDEO_API_URL}/${videoId}` ,{ withCredentials: true });
+      set({ isLoading: false, error: null, video: response.data.data });
+    } catch (error) {
+      set({
+        error: error.response?.data?.message || "Error fetching video",
+        isLoading: false,
+      });
+      return null;
+    }
+  },
   toggleSubscribe: async (channelId) => {
     set({ toggleSubscribeLoading: true, error: null });
     try {
@@ -153,20 +166,6 @@ export const useActionStore = create((set) => ({
     } catch (error) {
       set({
         error: error.response?.data?.message || "Error toggling subscribe",
-        isLoading: false,
-      });
-      return null;
-    }
-  },
-  getVideoById: async (videoId) => {
-    set({ isLoading: true, error: null });
-    try {
-      const response = await axios.get(`${VIDEO_API_URL}/${videoId}`);
-      set({ isLoading: false, error: null, video: response.data.data });
-      return response.data.data;
-    } catch (error) {
-      set({
-        error: error.response?.data?.message || "Error fetching video",
         isLoading: false,
       });
       return null;

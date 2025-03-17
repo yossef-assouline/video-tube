@@ -2,16 +2,22 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 
-
 const app = express();
 
-// CORS Configuration - Place this BEFORE any routes
+// Cookie parser must come before cors
+app.use(cookieParser());
+
 app.use(cors({
-  origin: true, // Allow all origins temporarily for testing
+  origin: [
+    'http://localhost:3000',
+    'https://video-tube-one.vercel.app/'
+  ],
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+// Debug middleware
 
 // Pre-flight requests
 app.options('*', cors());
@@ -20,7 +26,6 @@ app.options('*', cors());
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
 app.use(express.static("public"));
-app.use(cookieParser());
 
 //import routes
 import healthcheckRouter from "./routes/healthcheck.routes.js";

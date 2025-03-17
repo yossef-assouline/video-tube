@@ -23,9 +23,7 @@ export default function NavBar({ toggleSidebar }) {
     // Only check auth once when component mounts
     checkAuth();
   }, []); // Empty dependency array
-  useEffect(() => {
-    console.log("user", user);
-  }, [user]);
+  
 
   const handleLogout = async () => {
     await logout();

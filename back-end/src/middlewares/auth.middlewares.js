@@ -3,40 +3,42 @@ import {User} from "../models/user.models.js";
 import {ApiError} from "../utils/ApiError.js";
 import {asyncHandler} from "../utils/asyncHandler.js";
 
-const verifyJWT = asyncHandler(async (req, res, next) => {
+const verifyJWT = asyncHandler(async (req, _res, next) => {
   try {
-    const token = req.cookies?.accessToken ;
-
+    const token = req.cookies?.accessToken || null;
+    
+  
+ 
+    
     if (!token) {
-      return res.status(401).json({
-        success: false,
-        message: "Authentication required"
-      });
+      throw new ApiError(401, "Unauthorized request - No token provided");
     }
 
-    // Verify token
-    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+
+
+    const user = await User.findById(decodedToken.id || decodedToken._id)
+      .select("-password -refreshToken");
     
-    // Attach user to request
-    req.user = decoded;
+
+
+    if (!user) {
+      throw new ApiError(401, "Invalid Access Token - User not found");
+    }
+
+    req.user = user;
+    
     next();
   } catch (error) {
-    console.error("Token verification error:", error);
-    
-    // Clear invalid token
-    res.clearCookie('accessToken', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'none'
-    });
-    
-    return res.status(401).json({
-      success: false,
-      message: "Invalid authentication"
-    });
+    console.error("Auth middleware error:", error);
+    if (error.name === 'JsonWebTokenError') {
+      throw new ApiError(401, "Invalid access token");
+    }
+    if (error.name === 'TokenExpiredError') {
+      throw new ApiError(401, "Access token expired");
+    }
+    throw error;
   }
 });
 
 export { verifyJWT };
-
-

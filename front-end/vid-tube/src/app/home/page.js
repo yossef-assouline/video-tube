@@ -13,7 +13,7 @@ import CollapsedSideBar from '../components/CollapsedSideBar';
 export default function HomePage() {
   const router = useRouter();
   const { AllVideos, isFetchingVideos, fetchAllVideos, getSubscribedChannels, subscribedChannels } = useActionStore();
-  const { user } = useAuthStore();
+  const { user , isAuthenticated  } = useAuthStore();
   const [subscribedChannelsArray, setSubscribedChannelsArray] = useState([]);
   const [videoArray, setVideoArray] = useState([]);
   const [page, setPage] = useState(1);
@@ -34,7 +34,10 @@ export default function HomePage() {
   useEffect(() => {
     setSubscribedChannelsArray(subscribedChannels);
   }, [subscribedChannels]);
- 
+ useEffect(() => {
+  console.log(user);
+  console.log(isAuthenticated);
+ }, [user]);
   
 
   // Update videos when AllVideos changes

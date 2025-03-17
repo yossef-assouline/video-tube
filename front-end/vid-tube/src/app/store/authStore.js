@@ -64,6 +64,7 @@ export const useAuthStore = create((set) => ({
       if (response.data.data) {
         set({ 
           loggedInUser: response.data.data, 
+          user: response.data.data,
           isAuthenticated: true, 
           isCheckingAuth: false,
           error: null 
@@ -71,6 +72,7 @@ export const useAuthStore = create((set) => ({
       } else {
         set({ 
           loggedInUser: null, 
+          user: null,
           isAuthenticated: false, 
           isCheckingAuth: false,
           error: null 
