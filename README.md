@@ -1,6 +1,6 @@
 # VidView - Video Streaming Platform 🎥
 
-![VidView Logo](public/logo.png)
+![VidView Logo](front-end/vid-tube/public/logo.png)
 
 VidView is a modern video streaming platform built with Next.js and Node.js, offering a seamless experience for content creators and viewers. Share, watch, and engage with videos in a user-friendly environment.
 
@@ -102,13 +102,13 @@ The application will be available at:
 
 [Add screenshots of your application here]
 ### Login
-![Login](public/login.png)
+![Login](front-end/vid-tube/public/login.png)
 
 ### Home Page
-![Home Page](public/home-page.png)
+![Home Page](front-end/vid-tube/public/home-page.png)
 
 ### Video Player
-![Video Player](public/watch-video.png)
+![Video Player](front-end/vid-tube/public/watch-video.png)
 
 
 
