@@ -102,13 +102,13 @@ The application will be available at:
 
 [Add screenshots of your application here]
 ### Login
-![Login](front-end/vid-tube/public/login.png)
+![Login](front-end/vid-tube/public/login.PNG)
 
 ### Home Page
-![Home Page](front-end/vid-tube/public/home-page.png)
+![Home Page](front-end/vid-tube/public/home-page.PNG)
 
 ### Video Player
-![Video Player](front-end/vid-tube/public/watch-video.png)
+![Video Player](front-end/vid-tube/public/watch-video.PNG)
 
 
 
