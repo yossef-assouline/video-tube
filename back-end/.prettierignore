@@ -5,3 +5,5 @@
 *.env
 .env
 .env.*
+public/temp/*
+!public/temp/.gitkeep

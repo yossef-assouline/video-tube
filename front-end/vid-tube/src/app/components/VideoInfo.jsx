@@ -46,7 +46,7 @@ function ChannelInfo({ owner, user, isSubscribed, setIsSubscribed, toggleSubscri
   const router = useRouter();
   
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-4 flex-wrap">
       <Image
         onClick={() => router.push(`/c/${owner.username}`)}
         src={owner.avatar || "/default-avatar.jpg"}

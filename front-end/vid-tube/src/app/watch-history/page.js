@@ -28,9 +28,7 @@ export default function WatchHistoryPage() {
       setIsLoading(false);
     }
   }, [user]);
-  useEffect(() => {
-    console.log(watchHistory)
-  }, [watchHistory]);
+
 
   // Handle window resize
   useEffect(() => {

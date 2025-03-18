@@ -13,9 +13,9 @@ export const useAuthStore = create((set) => ({
   loginError: null,
   error: null,
   loggedInUser: null,
-
+  registerError: null,
   signup: async (formData) => {
-    set({ isLoading: true, error: null });
+    set({ isLoading: true, registerError: null });
     try {
       const response = await api.post('/api/v1/users/register', formData, {
         headers: {
@@ -23,9 +23,10 @@ export const useAuthStore = create((set) => ({
         },
         withCredentials: true
       });
-      set({ isLoading: false });
+      set({ isLoading: false  });
+      return response;
     } catch (error) {
-      set({ error: error.response.data.message, isLoading: false });
+      set({ registerError: error.response.data.message, isLoading: false });
     }
   },
 
