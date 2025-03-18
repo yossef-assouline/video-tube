@@ -8,21 +8,25 @@ import { redirect } from "next/navigation";
 import { useAuthStore } from "./store/authStore";
 
 export default function Home() {
-  const { user , isAuthenticated , checkAuth } = useAuthStore();
+  const { user, isAuthenticated, checkAuth } = useAuthStore();
+
   useEffect(() => {
-    
-    checkAuth()
-  }, [checkAuth])
+    const token = Cookies.get('logged_in')
+    console.log(token)
+    if (token) {
+      checkAuth()
+    }
+  }, [checkAuth]);
 
+  // If user is already authenticated, redirect to home
+  if (isAuthenticated) {
+    redirect('/home');
+  }
 
+  // Otherwise show login form
   return (
     <div className="min-h-screen bg-gray-100">
-
-        {!isAuthenticated ? (
-        <LoginForm user={user} />
-      ) : (
-        redirect('/home')
-      )}
+      <LoginForm user={user} />
     </div>
   );
 }

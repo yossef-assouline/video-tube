@@ -75,13 +75,17 @@ function ChannelInfo({ owner, user, isSubscribed, setIsSubscribed, toggleSubscri
 
 function VideoStats({ video, toggleLike }) {
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center  gap-4">
+      <div className="flex items-center   border  bg-green-200 rounded-full px-3 h-8">
       <LikeButton 
         initialLikes={video.likes}
         isInitiallyLiked={video.isLiked}
         onLike={() => toggleLike(video._id)}
       />
+      </div>
+      <div className="flex items-center gap-2 bg-green-200 rounded-full border px-3 h-8">
       <ViewCount views={video.views} />
+      </div>
     </div>
   );
 }

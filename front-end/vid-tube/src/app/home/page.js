@@ -34,10 +34,7 @@ export default function HomePage() {
   useEffect(() => {
     setSubscribedChannelsArray(subscribedChannels);
   }, [subscribedChannels]);
- useEffect(() => {
-  console.log(user);
-  console.log(isAuthenticated);
- }, [user]);
+
   
 
   // Update videos when AllVideos changes

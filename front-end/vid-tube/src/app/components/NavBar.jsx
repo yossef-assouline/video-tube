@@ -5,7 +5,6 @@ import { useAuthStore } from '../store/authStore';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import UploadVideoModal from './UploadVideoModal';
-import { useParams } from 'next/navigation';
 import { Menu } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
@@ -56,7 +55,7 @@ export default function NavBar({ toggleSidebar }) {
               </button>
             ) : null}
           <Link href="/home" className="text-xl font-bold text-gray-800">
-            VidTube
+            <Image src="/logo.png" alt="logo" width={150} height={92} />
           </Link>
         </div>
 

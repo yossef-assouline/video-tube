@@ -5,7 +5,7 @@ import { useAuthStore } from "../store/authStore";
 import { toast } from "react-hot-toast";
 import LikeButton from "./LikeButton";
 
-export default function CommentsSection({ videoId }) {
+export default function CommentSection({ videoId }) {
   const {
     comments,
     getVideoComments,

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import api from '../utils/axios';
-
+import Cookies from 'js-cookie'
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:7000";
 
 const API_URL = `${BASE_URL}/api/v1/users`;
@@ -69,6 +69,8 @@ export const useAuthStore = create((set) => ({
           isCheckingAuth: false,
           error: null 
         });
+      // Set authentication cookie on successful auth check
+      Cookies.set('logged_in', 'true', { path: '/' });
       } else {
         set({ 
           loggedInUser: null, 
@@ -79,11 +81,7 @@ export const useAuthStore = create((set) => ({
         });
       }
     } catch (error) {
-      console.error('CheckAuth Error:', {
-        message: error.message,
-        response: error.response?.data,
-        status: error.response?.status
-      });
+      console.error('Error checking authentication:', error);
       
       set({ 
         loggedInUser: null,
@@ -91,6 +89,8 @@ export const useAuthStore = create((set) => ({
         isCheckingAuth: false,
         error: error.response?.data?.message || "Error checking authentication" 
       });
+      // Remove authentication cookie on failed auth check
+      Cookies.remove('logged_in', { path: '/' });
     }
   },
 
@@ -104,6 +104,8 @@ export const useAuthStore = create((set) => ({
         loginError: null,
         error: null 
       });
+      // Remove authentication cookie on logout
+      Cookies.remove('logged_in', { path: '/' });
       window.location.href = '/';
     } catch (error) {
       console.error('Logout Error:', {
