@@ -73,7 +73,7 @@ export default function LoginForm() {
       </div>
 
       {/* Right Section */}
-      <div className="w-full md:w-1/2 p-12 flex items-center justify-center relative backdrop-blur-sm ">
+      <div className="w-full md:w-1/2 p-12 flex items-center justify-center relative  ">
         <div className="w-full max-w-md bg-white/80 dark:bg-gray-900/80 p-8 rounded-2xl shadow-xl border border-gray-300">
           <h2 className="text-center text-3xl font-bold mb-2 md:text-left">Sign in to your account</h2>
           <p className="mb-8 text-gray-600 dark:text-gray-400 text-center md:text-left">
