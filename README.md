@@ -100,7 +100,7 @@ The application will be available at:
 
 ## 📱 Screenshots
 
-[Add screenshots of your application here]
+
 ### Login
 ![Login](front-end/vid-tube/public/login.PNG)
 
@@ -161,4 +161,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Yossef Assouline 
 
+[@yourlinkedin](https://www.linkedin.com/in/yossef-assouline-495992301/)
 
