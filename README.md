@@ -161,5 +161,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 Yossef Assouline 
 
-[@yourlinkedin](https://www.linkedin.com/in/yossef-assouline-495992301/)
+[Linked in](https://www.linkedin.com/in/yossef-assouline-495992301/)
 
