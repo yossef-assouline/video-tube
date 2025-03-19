@@ -196,8 +196,8 @@ export default function UploadVideoModal({ isOpen, onClose }) {
               <>
                 <div className="relative w-full aspect-video rounded-lg overflow-hidden">
                   <Image
-                    src={uploadedVideoState.thumbnail}
-                    alt={uploadedVideoState.title}
+                    src={uploadedVideoState?.thumbnail}
+                    alt={uploadedVideoState?.title}
                     fill
                     className="object-cover"
                   />
@@ -205,12 +205,12 @@ export default function UploadVideoModal({ isOpen, onClose }) {
                 <div className="space-y-2">
                   <h3 className="font-semibold">{uploadedVideo.title}</h3>
                   <div className="flex justify-between items-center">
-                    <Link
-                      href={`/watch/${uploadedVideoState._id}`}
+                    <button
+                      onClick={() => router.push(`/watch/${uploadedVideoState?._id}`)}
                       className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-md text-sm"
                     >
                       Watch Video
-                    </Link>
+                    </button>
                   </div>
                 </div>
               </>
