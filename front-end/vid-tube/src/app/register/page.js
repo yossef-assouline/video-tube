@@ -298,7 +298,7 @@ export default function Register() {
             "Submit"
           )}
         </button>
-        <Link href="/login">Already have an account? <span className="text-emerald-500">Login</span></Link>
+        <Link href="/">Already have an account? <span className="text-emerald-500">Login</span></Link>
       </form>
     </div>
   )
