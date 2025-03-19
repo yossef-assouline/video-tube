@@ -7,18 +7,17 @@ const app = express();
 // Cookie parser must come before cors
 app.use(cookieParser());
 
-const corsOptions = {
-  origin: ['http://localhost:3000', 'http://https://video-tube-one.vercel.app/'],
-
+app.use(cors({
+  origin: ['http://localhost:3000', 'http://https://video-tube-one.vercel.app'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: 'Content-Type, Authorization, X-Requested-With',
   preflightContinue: false,
   optionsSuccessStatus: 204
-};
+}))
 
 // Apply CORS middleware
-app.use(cors(corsOptions));
+app.options("*", cors());
 
 // common middleware
 app.use(express.json({ limit: "16kb" }));
