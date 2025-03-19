@@ -5,8 +5,9 @@ import { useActionStore } from '../store/actionStore';
 import { toast } from 'react-hot-toast';
 import Link from 'next/link';
 import { useEffect } from 'react';
-
+import { useRouter } from 'next/navigation';
 export default function UploadVideoModal({ isOpen, onClose }) {
+  const router = useRouter();
   const [step, setStep] = useState(1);
   const [videoFile, setVideoFile] = useState(null);
   const [thumbnail, setThumbnail] = useState(null);
