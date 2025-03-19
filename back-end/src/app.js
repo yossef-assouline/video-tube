@@ -8,7 +8,8 @@ const app = express();
 app.use(cookieParser());
 
 const corsOptions = {
-  origin: true,
+  origin: ['http://localhost:3000', 'http://https://video-tube-one.vercel.app/'],
+
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: 'Content-Type, Authorization, X-Requested-With',
