@@ -7,17 +7,43 @@ const app = express();
 // Cookie parser must come before cors
 app.use(cookieParser());
 
-app.use(cors({
-  origin: ['http://localhost:3000', 'http://https://video-tube-one.vercel.app'],
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: 'Content-Type, Authorization, X-Requested-With',
-  preflightContinue: false,
-  optionsSuccessStatus: 204
-}))
+const allowedOrigins = [
+  "https://video-tube-one.vercel.app",
+  "http://localhost:3000", // Add other allowed origins as necessary
+];
 
-// Apply CORS middleware
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
+  })
+);
+
 app.options("*", cors());
+
+// Additional headers for extra security
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  
+  if (req.method === 'OPTIONS') {
+    return res.status(204).end();
+  }
+  next();
+});
 
 // common middleware
 app.use(express.json({ limit: "16kb" }));
