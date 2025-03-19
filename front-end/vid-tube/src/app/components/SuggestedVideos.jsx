@@ -1,14 +1,14 @@
 import { useActionStore } from "@/app/store/actionStore";
 import { useEffect, useState } from "react";
 import VideoCard from "./VideoCard";
-
+import { useRouter } from "next/navigation";
 export default function SuggestedVideos({ currentVideoId }) {
   const { fetchAllVideos } = useActionStore();
   const { AllVideos } = useActionStore();
   const [videoArray, setVideoArray] = useState([]);
   const [hasMore, setHasMore] = useState(true);
   const [page, setPage] = useState(1);
-
+  const router = useRouter();
   useEffect(() => {
     fetchAllVideos();
   }, []);
@@ -55,6 +55,7 @@ export default function SuggestedVideos({ currentVideoId }) {
             >
               <VideoCard 
                 video={video} 
+                onVideoClick={() => router.push(`/watch/${video._id}`)}
                 layout="horizontal"  // Add this prop to VideoCard for horizontal layout
               />
             </div>
