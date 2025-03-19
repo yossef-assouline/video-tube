@@ -32,6 +32,8 @@ export const useActionStore = create((set) => ({
   subscribedChannels: [],
   watchHistory: [],
   likedVideos: [],
+  isUploading: false,
+  uploadedVideo: null,
   findChannel: async (username) => {
     set({ isLoading: true, error: null });
     try {
@@ -63,7 +65,7 @@ export const useActionStore = create((set) => ({
     }
   },
   publishVideo: async (formData) => {
-    set({ isLoading: true, error: null });
+    set({ isUploading: true, error: null, uploadedVideo: null });
     try {
       const response = await axios.post(`${VIDEO_API_URL}/publish`, formData, {
         headers: {
@@ -71,12 +73,12 @@ export const useActionStore = create((set) => ({
         },
         withCredentials: true
       });
-      set({ isLoading: false, error: null });
-      return response.data.data;
+      set({ isUploading: false, error: null, uploadedVideo: response.data });
+      return response.data;
     } catch (error) {
       set({
         error: error.response?.data?.message || "Error publishing video",
-        isLoading: false,
+        isUploading: false,
       });
       return null;
     }
@@ -100,14 +102,22 @@ export const useActionStore = create((set) => ({
   deleteVideo: async (videoId) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.delete(`${VIDEO_API_URL}/${videoId}`, { withCredentials: true });
-      set({ isLoading: false, error: null });
-      return response.data.data;
-    } catch (error) {
-      set({
-        error: error.response?.data?.message || "Error deleting video",
-        isLoading: false,
+      const response = await api.delete(`/api/v1/videos/${videoId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        withCredentials: true
       });
+      
+      set({ isLoading: false });
+      return response.data;
+    } catch (error) {
+      console.error('Delete video error:', error);
+      set({
+        error: error.response?.data?.message || 'Error deleting video',
+        isLoading: false
+      });
+      return null;
     }
   },
   updateVideo: async (videoId, updatedData) => {

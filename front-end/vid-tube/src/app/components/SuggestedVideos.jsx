@@ -55,7 +55,7 @@ export default function SuggestedVideos({ currentVideoId }) {
             >
               <VideoCard 
                 video={video} 
-                onVideoClick={() => router.push(`/watch/${video._id}`)}
+                onClick={() => router.push(`/watch/${video._id}`)}
                 layout="horizontal"  // Add this prop to VideoCard for horizontal layout
               />
             </div>

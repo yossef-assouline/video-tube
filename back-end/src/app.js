@@ -7,17 +7,17 @@ const app = express();
 // Cookie parser must come before cors
 app.use(cookieParser());
 
-app.use(cors({
-  origin : true,
+const corsOptions = {
+  origin: true,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+  allowedHeaders: 'Content-Type, Authorization, X-Requested-With',
+  preflightContinue: false,
+  optionsSuccessStatus: 204
+};
 
-// Debug middleware
-
-// Pre-flight requests
-app.options('*', cors());
+// Apply CORS middleware
+app.use(cors(corsOptions));
 
 // common middleware
 app.use(express.json({ limit: "16kb" }));

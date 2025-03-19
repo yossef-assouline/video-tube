@@ -16,8 +16,7 @@ const uploadOnCloudinary = async (localFilePath) => {
             .upload(
                 localFilePath, {
                     resource_type: "auto",
-                    allowed_formats: ["jpg", "jpeg", "png", "gif"],
-                    folder: "your-folder-name"
+
                 }
             )
         console.log("File uploaded on cloudinary. File src: " + response.url)
