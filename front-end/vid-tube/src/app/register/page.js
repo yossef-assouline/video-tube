@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 import  Spinner  from "../components/Spinner.jsx";
+import Link from "next/link";
 
 export default function Register() {
   const { signup, isLoading, registerError } = useAuthStore();
