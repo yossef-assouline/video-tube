@@ -11,16 +11,16 @@ const api = axios.create({
 // Request interceptor
 api.interceptors.request.use(
   (config) => {
-    // Add any auth tokens if needed
+
     // const token = localStorage.getItem('token');
     // if (token) {
     //   config.headers.Authorization = `Bearer ${token}`;
     // }
     
-    // Ensure proper headers for different methods
-    if (config.method === 'delete') {
-      config.headers['X-HTTP-Method-Override'] = 'DELETE';
-    }
+    // // Ensure proper headers for different methods
+    // if (config.method === 'delete') {
+    //   config.headers['X-HTTP-Method-Override'] = 'DELETE';
+    // }
     
     return config;
   },
