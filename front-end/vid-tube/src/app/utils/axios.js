@@ -1,42 +1,44 @@
 import axios from 'axios';
 
+const getStoredToken = () => {
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('accessToken');
+  }
+  return null;
+};
+
+const isMobileDevice = () => {
+  return (typeof window !== 'undefined' && 
+    (navigator.userAgent.match(/Android/i) ||
+     navigator.userAgent.match(/webOS/i) ||
+     navigator.userAgent.match(/iPhone/i) ||
+     navigator.userAgent.match(/iPad/i) ||
+     navigator.userAgent.match(/iPod/i) ||
+     navigator.userAgent.match(/BlackBerry/i) ||
+     navigator.userAgent.match(/Windows Phone/i)));
+};
+
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   withCredentials: true,
-  headers: {
-    'Content-Type': 'application/json',
-  }
 });
 
 // Request interceptor
 api.interceptors.request.use(
   (config) => {
-
-    // const token = localStorage.getItem('token');
-    // if (token) {
-    //   config.headers.Authorization = `Bearer ${token}`;
-    // }
+    const token = getStoredToken();
     
-    // // Ensure proper headers for different methods
-    // if (config.method === 'delete') {
-    //   config.headers['X-HTTP-Method-Override'] = 'DELETE';
-    // }
+    if (token) {
+      config.headers['Authorization'] = `Bearer ${token}`;
+      config.headers['x-auth-token'] = token;
+    }
+
+    // Add device type header
+    config.headers['x-device-type'] = isMobileDevice() ? 'mobile' : 'desktop';
     
     return config;
   },
   (error) => {
-    return Promise.reject(error);
-  }
-);
-
-// Response interceptor
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 403 || error.response?.status === 401) {
-      // Handle authentication errors
-      console.error('Authentication error:', error);
-    }
     return Promise.reject(error);
   }
 );

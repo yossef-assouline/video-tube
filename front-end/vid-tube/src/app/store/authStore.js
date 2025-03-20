@@ -30,90 +30,63 @@ export const useAuthStore = create((set) => ({
     }
   },
 
-  login: async (email, password) => {
-    set({ isLoading: true, error: null });
+  login: async (credentials) => {
     try {
-      const response = await api.post('/api/v1/users/login', {
-        email,
-        password
+      const response = await api.post('/api/v1/users/login', credentials);
+      
+      // Store token in localStorage
+      if (response.data.accessToken) {
+        localStorage.setItem('auth_token', response.data.accessToken);
+      }
+
+      set({ 
+        user: response.data.user, 
+        isAuthenticated: true,
+        error: null 
       });
       
-      set({ 
-        user: response.data.data.user, 
-        isAuthenticated: true, 
-        isLoading: false, 
-        loginError: null 
-      });
+      return response.data;
     } catch (error) {
-      console.error('Login Error:', {
-        message: error.message,
-        response: error.response?.data,
-        status: error.response?.status
-      });
-      
+      console.error('Login error:', error);
       set({ 
-        error: error.response?.data?.message || "Error logging in", 
-        isLoading: false, 
-        loginError: error.response?.data?.message || "Error logging in" 
+        error: error.response?.data?.message || 'Login failed',
+        isAuthenticated: false 
       });
+      throw error;
     }
   },
 
   checkAuth: async () => {
     try {
-      const response = await api.get('/api/v1/users/current-user');
-      if (response.data.data) {
-        set({ 
-          loggedInUser: response.data.data, 
-          user: response.data.data,
-          isAuthenticated: true, 
-          isCheckingAuth: false,
-          error: null 
-        });
-      // Set authentication cookie on successful auth check
-      Cookies.set('logged_in', 'true', { path: '/' });
-      } else {
-        set({ 
-          loggedInUser: null, 
-          user: null,
-          isAuthenticated: false, 
-          isCheckingAuth: false,
-          error: null 
-        });
-      }
-    } catch (error) {
-      console.error('Error checking authentication:', error);
-      
+      const response = await api.get('/api/v1/users/check-auth');
       set({ 
-        loggedInUser: null,
-        isAuthenticated: false, 
-        isCheckingAuth: false,
-        error: error.response?.data?.message || "Error checking authentication" 
+        user: response.data.user, 
+        isAuthenticated: true,
+        error: null 
       });
-      // Remove authentication cookie on failed auth check
-      Cookies.remove('logged_in', { path: '/' });
+    } catch (error) {
+      // Clear token if auth check fails
+      localStorage.removeItem('accessToken');
+      set({ 
+        user: null, 
+        isAuthenticated: false,
+        error: error.response?.data?.message || 'Authentication failed' 
+      });
     }
   },
 
   logout: async () => {
     try {
       await api.post('/api/v1/users/logout');
+      // Clear stored token
+      localStorage.removeItem('accessToken');
       set({ 
         user: null, 
-        isAuthenticated: false, 
-        isLoading: false,
-        loginError: null,
+        isAuthenticated: false,
         error: null 
       });
-      // Remove authentication cookie on logout
-      Cookies.remove('logged_in', { path: '/' });
-      window.location.href = '/';
     } catch (error) {
-      console.error('Logout Error:', {
-        message: error.message,
-        response: error.response?.data,
-        status: error.response?.status
-      });
+      console.error('Logout error:', error);
     }
   },
 
