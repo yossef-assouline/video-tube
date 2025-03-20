@@ -5,37 +5,45 @@ import {asyncHandler} from "../utils/asyncHandler.js";
 
 const verifyJWT = asyncHandler(async (req, _res, next) => {
   try {
-    const token = req.cookies?.accessToken || // Check cookies first
-      req.header("Authorization")?.replace("Bearer ", "") || // Check Authorization header
-      req.header("x-auth-token") || // Check custom header
-      req.query.accessToken; // Check URL params as last resort
+    let token;
+    const isMobile = req.headers['x-device-type'] === 'mobile';
+
+    console.log("Device type:", req.headers['x-device-type']);
+    
+    if (isMobile) {
+      // For mobile clients, prioritize Authorization header or x-auth-token
+      token = req.header("Authorization")?.replace("Bearer ", "") || 
+              req.header("x-auth-token");
+              
+      console.log("Mobile token found:", token);
+    } else {
+      // For desktop clients, prioritize cookies
+      token = req.cookies?.accessToken || null;
+      console.log("Desktop token found:", token);
+    }
 
     console.log("Auth sources:", {
+      isMobile,
       cookies: req.cookies,
       authHeader: req.header("Authorization"),
       xAuthToken: req.header("x-auth-token"),
       queryToken: req.query.accessToken
     });
  
-    
     if (!token) {
-      throw new ApiError(401, "Unauthorized request - No token provided");
+      throw new ApiError(401, `Unauthorized request - No token provided for ${isMobile ? 'mobile' : 'desktop'} client`);
     }
 
     const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
-
     const user = await User.findById(decodedToken.id || decodedToken._id)
       .select("-password -refreshToken");
-    
-
 
     if (!user) {
       throw new ApiError(401, "Invalid Access Token - User not found");
     }
 
     req.user = user;
-    
     next();
   } catch (error) {
     console.error("Auth middleware error:", error);
