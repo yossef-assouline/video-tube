@@ -31,12 +31,12 @@ export const useActionStore = create((set) => ({
   findChannel: async (username) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.get(`${USER_API_URL}/c/${username}`, { withCredentials: true });
+      const response = await api.get(`/api/v1/users/c/${username}`, { withCredentials: true });
       const channelData = response.data.data;
 
       // Fetch videos immediately after getting channel data
-      const videosResponse = await axios.get(
-        `${VIDEO_API_URL}/u/${channelData._id}/published`,
+      const videosResponse = await api.get(
+        `/api/v1/videos/u/${channelData._id}/published`,
         { withCredentials: true }
       );
       set({
@@ -61,7 +61,7 @@ export const useActionStore = create((set) => ({
   publishVideo: async (formData) => {
     set({ isUploading: true, error: null, uploadedVideo: null });
     try {
-      const response = await axios.post(`${VIDEO_API_URL}/publish`, formData, {
+      const response = await api.post(`/api/v1/videos/publish`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -80,7 +80,7 @@ export const useActionStore = create((set) => ({
   getVideoById: async (videoId) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.get(`${VIDEO_API_URL}/${videoId}`);
+      const response = await api.get(`/api/v1/videos/${videoId}`);
 
       set({ isLoading: false, error: null, video: response.data.data });
       console.log("response", response.data.data)
@@ -117,7 +117,7 @@ export const useActionStore = create((set) => ({
   updateVideo: async (videoId, updatedData) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.put(`${VIDEO_API_URL}/${videoId}`, updatedData, {
+      const response = await api.put(`/api/v1/videos/${videoId}`, updatedData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -147,7 +147,7 @@ export const useActionStore = create((set) => ({
   getVideoById: async (videoId) => {
     set({ isLoading: true, error: null });
     try {
-      const response = await axios.get(`${VIDEO_API_URL}/${videoId}` ,{ withCredentials: true });
+      const response = await api.get(`/api/v1/videos/${videoId}` ,{ withCredentials: true });
       set({ isLoading: false, error: null, video: response.data.data });
     } catch (error) {
       set({
@@ -160,8 +160,8 @@ export const useActionStore = create((set) => ({
   toggleSubscribe: async (channelId) => {
     set({ toggleSubscribeLoading: true, error: null });
     try {
-      const response = await axios.post(
-        `${SUBSCRIPTION_API_URL}/c/${channelId}`,
+      const response = await api.post(
+        `/api/v1/subscriptions/c/${channelId}`,
         {},
         { withCredentials: true }
       );
@@ -179,8 +179,8 @@ export const useActionStore = create((set) => ({
     
     set({ toggleLikeLoading: true, error: null });
     try {
-      const response = await axios.post(
-        `${LIKE_API_URL}/toggle/v/${videoId}`,
+      const response = await api.post(
+        `/api/v1/likes/toggle/v/${videoId}`,
         {},
         { withCredentials: true }
       );
@@ -197,7 +197,7 @@ export const useActionStore = create((set) => ({
   getVideoComments: async (videoId) => {
     set({ commentLoading: true, error: null });
     try {
-      const response = await axios.get(`${COMMENT_API_URL}/${videoId}`, { withCredentials: true });
+      const response = await api.get(`/api/v1/comments/${videoId}`, { withCredentials: true });
       set({ commentLoading: false, error: null, comments: response.data.data });
       return response.data.data;
     } catch (error) {
@@ -211,8 +211,8 @@ export const useActionStore = create((set) => ({
   postComment: async (videoId, comment) => {
     set({ commentLoading: true, error: null });
     try {
-      const response = await axios.post(
-        `${COMMENT_API_URL}/${videoId}`,
+      const response = await api.post(
+        `/api/v1/comments/${videoId}`,
         { comment },
         { withCredentials: true }
       );
@@ -228,7 +228,7 @@ export const useActionStore = create((set) => ({
   deleteComment: async (commentId) => {
     set({ commentLoading: true, error: null });
     try {
-      const response = await axios.delete(`${COMMENT_API_URL}/c/${commentId}`, { withCredentials: true });
+      const response = await api.delete(`/api/v1/comments/c/${commentId}`, { withCredentials: true });
       set({ commentLoading: false, error: null });
     } catch (error) {
       set({
@@ -241,8 +241,8 @@ export const useActionStore = create((set) => ({
   updateComment: async (commentId, editedContent) => {
     set({ commentLoading: true, error: null });
     try {
-      const response = await axios.patch(
-        `${COMMENT_API_URL}/c/${commentId}`,
+      const response = await api.patch(
+        `/api/v1/comments/c/${commentId}`,
         { updatedComment: editedContent },
         { withCredentials: true }
       );
@@ -257,7 +257,7 @@ export const useActionStore = create((set) => ({
   },
   getSubscribedChannels: async (userId) => {
     try {
-      const response = await axios.get(`${SUBSCRIPTION_API_URL}/s/${userId}`, { withCredentials: true });
+      const response = await api.get(`/api/v1/subscriptions/s/${userId}`, { withCredentials: true });
       set({ subscribedChannels: response.data.data.subscribedChannels  });
 
     } catch (error) {
@@ -269,7 +269,7 @@ export const useActionStore = create((set) => ({
   },
   getWatchHistory: async () => {
     try {
-      const response = await axios.get(`${USER_API_URL}/history`, { withCredentials: true });
+      const response = await api.get(`/api/v1/users/history`, { withCredentials: true });
       set({ watchHistory: response.data.data });
     } catch (error) {
       set({
@@ -281,8 +281,8 @@ export const useActionStore = create((set) => ({
   toggleCommentLike: async (commentId) => {
     try {
       
-      const response = await axios.post(
-        `${LIKE_API_URL}/toggle/c/${commentId}`,
+      const response = await api.post(
+        `/api/v1/likes/toggle/c/${commentId}`,
         {},
         { withCredentials: true }
       );
@@ -297,7 +297,7 @@ export const useActionStore = create((set) => ({
   },
   getLikedVideos: async () => {
     try {
-      const response = await axios.get(`${LIKE_API_URL}/videos`, { withCredentials: true });
+      const response = await api.get(`/api/v1/likes/videos`, { withCredentials: true });
       set({ likedVideos: response.data.data });
     } catch (error) {
       set({
