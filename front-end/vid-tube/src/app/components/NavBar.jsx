@@ -5,7 +5,7 @@ import { useAuthStore } from '../store/authStore';
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import UploadVideoModal from './UploadVideoModal';
-import { Menu } from 'lucide-react';
+import { Menu, Search } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 
 export default function NavBar({ toggleSidebar }) {
@@ -17,6 +17,7 @@ export default function NavBar({ toggleSidebar }) {
   const router = useRouter();
 
   const [showUploadModal, setShowUploadModal] = useState(false);
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
   useEffect(() => {
     // Only check auth once when component mounts
@@ -59,9 +60,10 @@ export default function NavBar({ toggleSidebar }) {
           </Link>
         </div>
 
-        {/* Center - Search */}
+        {/* Center - Search (Modified) */}
         <div className="flex-1 max-w-2xl mx-auto px-4">
-          <form onSubmit={handleSearch} className="relative">
+          {/* Hidden on mobile, visible on larger screens */}
+          <form onSubmit={handleSearch} className="relative hidden sm:block">
             <input
               type="text"
               placeholder="Search channels..."
@@ -73,22 +75,17 @@ export default function NavBar({ toggleSidebar }) {
               type="submit"
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
+              <Search className="h-5 w-5" />
             </button>
           </form>
+          
+          {/* Search icon visible only on mobile */}
+          <button
+            onClick={() => setIsSearchModalOpen(true)}
+            className="sm:hidden p-2 hover:bg-gray-100 rounded-full"
+          >
+            <Search className="h-5 w-5" />
+          </button>
         </div>
 
         {/* Right side - Upload and Profile */}
@@ -187,6 +184,53 @@ export default function NavBar({ toggleSidebar }) {
           )}
         </div>
       </div>
+
+      {/* Search Modal */}
+      {isSearchModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-start justify-center pt-16">
+          <div className="w-full max-w-lg mx-4 bg-white rounded-lg shadow-lg overflow-hidden">
+            <div className="p-4">
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => setIsSearchModalOpen(false)}
+                  className="p-2 hover:bg-gray-100 rounded-full"
+                >
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+                <form 
+                  onSubmit={(e) => {
+                    handleSearch(e);
+                    setIsSearchModalOpen(false);
+                  }}
+                  className="flex-1"
+                >
+                  <input
+                    type="text"
+                    placeholder="Search channels..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full px-4 py-2 rounded-full border border-gray-300 focus:outline-none focus:border-emerald-500"
+                    autoFocus
+                  />
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <UploadVideoModal 
         isOpen={showUploadModal} 
         onClose={() => setShowUploadModal(false)} 
