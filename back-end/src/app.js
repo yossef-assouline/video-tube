@@ -23,7 +23,7 @@ app.use(
     },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token",'X-Requested-With', 'X-Device-Type', 'X-Mobile-Request'],
+    allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token",'X-Requested-With', 'X-Device-Type', 'X-Mobile-Request' , 'x-auth-token'],
   })
 );
 
@@ -37,7 +37,7 @@ app.use((req, res, next) => {
   }
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With' , 'x-auth-token');
   
   if (req.method === 'OPTIONS') {
     return res.status(204).end();
