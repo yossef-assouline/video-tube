@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
-
+import api from "../utils/axios";
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:7000";
 const USER_API_URL = `${BASE_URL}/api/v1/users`;
 const VIDEO_API_URL = `${BASE_URL}/api/v1/videos`;
@@ -9,13 +9,7 @@ const LIKE_API_URL = `${BASE_URL}/api/v1/likes`;
 const COMMENT_API_URL = `${BASE_URL}/api/v1/comments`;
 
 // First, create an axios instance with default config
-const api = axios.create({
-  baseURL: BASE_URL,
-  withCredentials: true,
-  headers: {
-    'Content-Type': 'application/json'
-  }
-});
+
 
 export const useActionStore = create((set) => ({
   channelData: null,
@@ -141,7 +135,7 @@ export const useActionStore = create((set) => ({
   fetchAllVideos: async () => {
     set({ isFetchingVideos: true, error: null });
     try {
-      const response = await axios.get(VIDEO_API_URL, { withCredentials: true });
+      const response = await api.get('/api/v1/videos', { withCredentials: true });
       set({ isFetchingVideos: false, error: null, AllVideos: response.data.data });
     } catch (error) {
       set({

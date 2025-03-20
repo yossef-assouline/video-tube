@@ -43,7 +43,8 @@ export const useAuthStore = create((set) => ({
       }
 
       set({ 
-        user: response.data.data.user, 
+        user: response.data.data.user,
+        loggedInUser: response.data.data.user,
         isAuthenticated: true,
         loginError: null,
         isLoading: false
@@ -56,6 +57,7 @@ export const useAuthStore = create((set) => ({
         error: error.response?.data?.message || "Error logging in", 
         isLoading: false, 
         loginError: error.response?.data?.message || "Error logging in" 
+        
       });
       throw error;
     }
