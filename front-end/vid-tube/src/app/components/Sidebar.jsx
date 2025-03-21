@@ -59,7 +59,7 @@ export default function Sidebar({ user, subscribedChannels, isOpen, isMobile, on
       <div 
         className={`
           fixed top-16 bottom-0 left-0 z-30
-          w-64 dark:bg-[#0f0f0f] shadow-md border-gray-200 dark:border-gray-800 bg-white/80 backdrop-blur-sm 
+          w-64  shadow-md border-gray-200  bg-white/80 backdrop-blur-sm 
           transition-transform duration-300 ease-in-out
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}
           ${isMobile ? 'lg:hidden' : 'hidden lg:block'}
@@ -71,26 +71,26 @@ export default function Sidebar({ user, subscribedChannels, isOpen, isMobile, on
               <div key={index}>
                 {item.heading ? (
                   <div className="space-y-2">
-                    <h3 className="text-sm font-medium dark:text-gray-400 px-3">
+                    <h3 className="text-sm font-medium text-black  px-3">
                       {item.heading}
                     </h3>
-                    <hr className='border-gray-200 dark:border-gray-800' />
+                    <hr className='border-gray-200 ' />
                     {item.items.map((subItem, subIndex) => (
                       <button
                         key={subIndex}
                         onClick={() => router.push(subItem.path)}
                         className={`
-                          flex items-center gap-3 w-full px-3 py-2 text-sm rounded-lg
+                          flex items-center gap-3  w-full px-3 py-2 text-sm rounded-lg
                           transition-colors
                           ${isSelected(subItem.path) 
-                            ? 'bg-emerald-100 dark:bg-[#272727] text-emerald-600 font-medium' 
-                            : 'hover:bg-gray-100 dark:hover:bg-[#272727]'}
+                            ? 'bg-emerald-100  text-emerald-600 font-medium' 
+                            : 'hover:bg-gray-100 '}
                         `}
                       >
-                        <div className={`w-6 h-6 flex-shrink-0 ${isSelected(subItem.path) ? 'text-emerald-600' : ''}`}>
+                        <div className={`w-6 h-6 text-black  flex-shrink-0 ${isSelected(subItem.path) ? 'text-emerald-600' : ''}`}>
                           {subItem.icon}
                         </div>
-                        <span className="truncate">{subItem.label}</span>
+                        <span className="truncate text-black ">{subItem.label}</span>
                       </button>
                     ))}
                   </div>
@@ -101,14 +101,14 @@ export default function Sidebar({ user, subscribedChannels, isOpen, isMobile, on
                       flex items-center gap-3 w-full px-3 py-2 text-sm rounded-lg
                       transition-colors
                       ${isSelected(item.path) 
-                        ? 'bg-emerald-100 dark:bg-[#272727] text-emerald-600 font-medium' 
-                        : 'hover:bg-gray-100 dark:hover:bg-[#272727]'}
+                        ? 'bg-emerald-100  text-emerald-600 font-medium' 
+                        : 'hover:bg-gray-100 '}
                     `}
                   >
-                    <div className={`${isSelected(item.path) ? 'text-emerald-600' : ''}`}>
+                    <div className={ `text-black ${isSelected(item.path) ? 'text-emerald-600' : ''}`}>
                       {item.icon}
                     </div>
-                    <span>{item.label}</span>
+                    <span className='text-black'>{item.label}</span>
                   </button>
                 )}
               </div>

@@ -39,8 +39,8 @@ export default function NavBar({ toggleSidebar }) {
   };
 
   return (
-    <nav className="sticky top-0 w-full h-16  dark:bg-[#0f0f0f] z-50 dark:border-gray-800">
-      <div className="flex items-center h-full px-4 backdrop-blur-sm bg-white/80 shadow-md">
+    <nav className="sticky top-0 w-full h-16  bg-white/80  z-50 ">
+      <div className="flex items-center h-full px-4 backdrop-blur-sm  shadow-md">
         {/* Left side - Logo and Menu */}
         <div className="flex items-center gap-4">
             {(pathname.includes('home') || 
@@ -50,7 +50,7 @@ export default function NavBar({ toggleSidebar }) {
               pathname.includes('/c/') ? (
               <button 
                 onClick={toggleSidebar}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-[#272727] rounded-full"
+                className="p-2 hover:bg-emerald-50 text-black  rounded-full"
               >
                 <Menu size={24} />
               </button>

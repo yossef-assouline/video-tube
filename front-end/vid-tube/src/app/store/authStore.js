@@ -37,7 +37,6 @@ export const useAuthStore = create((set) => ({
       
       // Store token in localStorage
       if(response.data.statusCode === 200){
-        console.log("ok")
         localStorage.setItem('accessToken', response.data.data.accessToken);
         Cookies.set('logged_in', 'true', { path: '/' });
       }
@@ -57,7 +56,7 @@ export const useAuthStore = create((set) => ({
         error: error.response?.data?.message || "Error logging in", 
         isLoading: false, 
         loginError: error.response?.data?.message || "Error logging in" 
-        
+
       });
       throw error;
     }

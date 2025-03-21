@@ -33,7 +33,7 @@ export default function UploadVideoModal({ isOpen, onClose }) {
     }
   };
   useEffect(() => {
-    console.log(uploadedVideo);
+
     setUploadedVideoState(uploadedVideo?.data);
   }, [uploadedVideo]);
 

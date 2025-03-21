@@ -29,7 +29,7 @@ export default function SuggestedVideos({ currentVideoId }) {
   }, [AllVideos, currentVideoId]);
 
   return (
-    <div className="w-full">
+    <div className="w-full text-black">
       {/* Header with subtle separator */}
       <div className="flex items-center justify-between mb-4 pb-2 border-b dark:border-gray-800">
         <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">

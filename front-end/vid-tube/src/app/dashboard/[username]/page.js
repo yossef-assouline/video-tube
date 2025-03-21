@@ -119,7 +119,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f9f9f9]">
+    <div className="min-h-screen bg-[#f9f9f9] text-black">
       <NavBar />
       <div className="flex">
         {/* Sidebar */}

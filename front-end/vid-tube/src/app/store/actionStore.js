@@ -83,7 +83,6 @@ export const useActionStore = create((set) => ({
       const response = await api.get(`/api/v1/videos/${videoId}`);
 
       set({ isLoading: false, error: null, video: response.data.data });
-      console.log("response", response.data.data)
       return response.data.data;
     } catch (error) {
       set({

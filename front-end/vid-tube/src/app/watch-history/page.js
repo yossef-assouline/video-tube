@@ -59,7 +59,7 @@ export default function WatchHistoryPage() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-white text-black">
       <NavBar toggleSidebar={toggleSidebar} />
       
       <Sidebar 

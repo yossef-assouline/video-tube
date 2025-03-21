@@ -74,9 +74,9 @@ export default function LoginForm() {
 
       {/* Right Section */}
       <div className="w-full md:w-1/2 p-12 flex items-center justify-center relative  ">
-        <div className="w-full max-w-md bg-white/80 dark:bg-gray-900/80 p-8 rounded-2xl shadow-xl border border-gray-300">
-          <h2 className="text-center text-3xl font-bold mb-2 md:text-left">Sign in to your account</h2>
-          <p className="mb-8 text-gray-600 dark:text-gray-400 text-center md:text-left">
+        <div className="w-full max-w-md bg-white/80  p-8 rounded-2xl shadow-xl border border-gray-300">
+          <h2 className="text-center text-3xl font-bold mb-2 md:text-left text-black">Sign in to your account</h2>
+          <p className="mb-8 text-gray-600  text-center md:text-left">
             Or{" "}
             <Link href="/register" className="text-emerald-500 hover:text-emerald-600">
               create a new account
@@ -98,7 +98,7 @@ export default function LoginForm() {
                 type="email"
                 name="email"
                 placeholder="Enter your email"
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors"
+                className="w-full px-4 py-3 rounded-lg border text-black border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors"
                 required
               />
             </div>
@@ -111,7 +111,7 @@ export default function LoginForm() {
                 type="password"
                 name="password"
                 placeholder="Enter your password"
-                className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors"
+                className="w-full px-4 py-3 rounded-lg border text-black border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors"
                 required
               />
             </div>

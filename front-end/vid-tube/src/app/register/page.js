@@ -149,7 +149,7 @@ export default function Register() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col dark:bg-white dark:text-black items-center justify-center p-24">
+    <div className="flex min-h-screen bg-white flex-col items-center justify-center p-24">
       {/* Show register error from auth store */}
       {registerError && (
         <div className="w-full max-w-md mb-4">
@@ -172,7 +172,7 @@ export default function Register() {
 
       <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-md">
         <div>
-          <label htmlFor="fullname" className="block text-sm font-medium">
+          <label htmlFor="fullname" className="block text-sm font-medium text-black">
             Full Name
           </label>
           <input
@@ -181,9 +181,9 @@ export default function Register() {
             name="fullname"
             value={formData.fullname}
             onChange={handleChange}
-            className={`mt-1 block w-full rounded-md border-2 ${
+            className={`mt-1 block text-black w-full rounded-md border-2 ${
               formErrors.fullname ? 'border-red-500' : 'border-black'
-            } dark:bg-gray-300 dark:border-gray-600 px-3 py-2`}
+            } px-3 py-2`}
           />
           {formErrors.fullname && (
             <p className="text-red-500 text-xs mt-1">{formErrors.fullname}</p>
@@ -191,7 +191,7 @@ export default function Register() {
         </div>
 
         <div>
-          <label htmlFor="username" className="block text-sm font-medium">
+          <label htmlFor="username" className="block text-black text-sm font-medium">
             Username
           </label>
           <input
@@ -200,9 +200,9 @@ export default function Register() {
             name="username"
             value={formData.username}
             onChange={handleChange}
-            className={`mt-1 block w-full rounded-md border-2 ${
+            className={`mt-1 block w-full text-black rounded-md border-2 ${
               formErrors.username ? 'border-red-500' : 'border-black'
-            } dark:bg-gray-300 dark:border-gray-600 px-3 py-2`}
+            } px-3 py-2`}
           />
           {formErrors.username && (
             <p className="text-red-500 text-xs mt-1">{formErrors.username}</p>
@@ -210,7 +210,7 @@ export default function Register() {
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-sm font-medium">
+          <label htmlFor="email" className="block text-black text-sm font-medium">
             Email
           </label>
           <input
@@ -219,9 +219,9 @@ export default function Register() {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className={`mt-1 block w-full rounded-md border-2 ${
+            className={`mt-1 block w-full rounded-md text-black border-2 ${
               formErrors.email ? 'border-red-500' : 'border-black'
-            } dark:bg-gray-300 dark:border-gray-600 px-3 py-2`}
+            } px-3 py-2`}
           />
           {formErrors.email && (
             <p className="text-red-500 text-xs mt-1">{formErrors.email}</p>
@@ -229,7 +229,7 @@ export default function Register() {
         </div>
 
         <div>
-          <label htmlFor="password" className="block text-sm font-medium">
+          <label htmlFor="password" className="block text-black text-sm font-medium">
             Password
           </label>
           <input
@@ -238,9 +238,9 @@ export default function Register() {
             name="password"
             value={formData.password}
             onChange={handleChange}
-            className={`mt-1 block w-full rounded-md border-2 ${
+            className={`mt-1 block w-full rounded-md text-black border-2 ${
               formErrors.password ? 'border-red-500' : 'border-black'
-            } dark:bg-gray-300 dark:border-gray-600 px-3 py-2`}
+            } px-3 py-2`}
           />
           {formErrors.password && (
             <p className="text-red-500 text-xs mt-1">{formErrors.password}</p>
@@ -248,7 +248,7 @@ export default function Register() {
         </div>
 
         <div>
-          <label htmlFor="avatar" className="block text-sm font-medium">
+          <label htmlFor="avatar" className="block text-black text-sm font-medium">
             Avatar
           </label>
           <input
@@ -257,9 +257,9 @@ export default function Register() {
             name="avatar"
             accept="image/*"
             onChange={handleChange}
-            className={`flex h-10 w-full rounded-md border-2 ${
+            className={`flex h-10 w-full rounded-md text-black border-2 ${
               formErrors.avatar ? 'border-red-500' : 'border-black'
-            } dark:bg-gray-300 dark:border-gray-600 px-3 py-2 text-sm text-gray-400 file:border-0 file:bg-transparent file:text-gray-600 file:text-sm file:font-medium`}
+            } px-3 py-2 text-sm text-gray-400 file:border-0 file:bg-transparent file:text-gray-600 file:text-sm file:font-medium`}
           />
           {formErrors.avatar && (
             <p className="text-red-500 text-xs mt-1">{formErrors.avatar}</p>
@@ -267,7 +267,7 @@ export default function Register() {
         </div>
 
         <div>
-          <label htmlFor="coverImage" className="block text-sm font-medium">
+          <label htmlFor="coverImage" className="block text-black text-sm font-medium">
             Cover Image
           </label>
           <input
@@ -278,7 +278,7 @@ export default function Register() {
             onChange={handleChange}
             className={`flex h-10 w-full rounded-md border-2 ${
               formErrors.coverImage ? 'border-red-500' : 'border-black'
-            } dark:bg-gray-300 dark:border-gray-600 px-3 py-2 text-sm text-gray-400 file:border-0 file:bg-transparent file:text-gray-600 file:text-sm file:font-medium`}
+            } px-3 py-2 text-sm text-gray-400 file:border-0 file:bg-transparent file:text-gray-600 file:text-sm file:font-medium`}
           />
           {formErrors.coverImage && (
             <p className="text-red-500 text-xs mt-1">{formErrors.coverImage}</p>
@@ -298,7 +298,7 @@ export default function Register() {
             "Submit"
           )}
         </button>
-        <Link href="/">Already have an account? <span className="text-emerald-500">Login</span></Link>
+        <Link className="text-black" href="/">Already have an account? <span className="text-emerald-500 ">Login</span></Link>
       </form>
     </div>
   )

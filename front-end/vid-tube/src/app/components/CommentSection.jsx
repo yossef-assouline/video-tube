@@ -24,7 +24,6 @@ export default function CommentSection({ videoId }) {
 
   useEffect(() => {
     getVideoComments(videoId);
-    console.log(error);
   }, [videoId]);
 
   return (

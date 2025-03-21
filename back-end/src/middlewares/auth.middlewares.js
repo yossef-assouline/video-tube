@@ -8,27 +8,21 @@ const verifyJWT = asyncHandler(async (req, _res, next) => {
     let token;
     const isMobile = req.headers['x-device-type'] === 'mobile';
 
-    console.log("Device type:", req.headers['x-device-type']);
+
     
     if (isMobile) {
       // For mobile clients, prioritize Authorization header or x-auth-token
       token = req.header("Authorization")?.replace("Bearer ", "") || 
               req.header("x-auth-token");
               
-      console.log("Mobile token found:", token);
+
     } else {
       // For desktop clients, prioritize cookies
       token = req.cookies?.accessToken || null;
-      console.log("Desktop token found:", token);
+
     }
 
-    console.log("Auth sources:", {
-      isMobile,
-      cookies: req.cookies,
-      authHeader: req.header("Authorization"),
-      xAuthToken: req.header("x-auth-token"),
-      queryToken: req.query.accessToken
-    });
+   
  
     if (!token) {
       throw new ApiError(401, `Unauthorized request - No token provided for ${isMobile ? 'mobile' : 'desktop'} client`);
