@@ -81,7 +81,7 @@ export default function ChannelPage() {
         
       `}>
         <div className="xl:w-full xl:flex xl:flex-col xl:items-center">
-        <div className="w-full md:max-w-6xl flex flex-col ">
+        <div className="w-full lg:ml-20 xl:ml-0 md:max-w-6xl flex flex-col ">
           <ChannelHeader 
             channelData={channelData}
             videos={videos}

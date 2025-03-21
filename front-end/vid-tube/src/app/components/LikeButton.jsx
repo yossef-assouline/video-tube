@@ -47,7 +47,7 @@ export default function LikeButton({ initialLikes = 0, isInitiallyLiked = false,
         } ${
           isLiked 
             ? 'text-emerald-500 ' 
-            : 'text-black group-hover:text-emerald-500'
+            : 'text-black hover:text-emerald-500'
         }`}
         size={20}
       />

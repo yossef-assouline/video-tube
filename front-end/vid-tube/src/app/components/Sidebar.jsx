@@ -50,7 +50,7 @@ export default function Sidebar({ user, subscribedChannels, isOpen, isMobile, on
       {/* Overlay for mobile */}
       {isMobile && isOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity duration-300 backdrop-blur-sm"
+          className="fixed inset-0 bg-black bg-opacity-50 z-20 transition-opacity duration-300 backdrop-blur-sm"
           onClick={() => onClose()}
         />
       )}
@@ -58,7 +58,7 @@ export default function Sidebar({ user, subscribedChannels, isOpen, isMobile, on
       {/* Sidebar */}
       <div 
         className={`
-          fixed top-16 bottom-0 left-0 z-50
+          fixed top-16 bottom-0 left-0 z-20
           w-64  shadow-md border-gray-200  bg-white/80 backdrop-blur-sm 
           transition-transform duration-300 ease-in-out
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}

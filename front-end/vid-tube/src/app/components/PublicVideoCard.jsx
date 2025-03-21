@@ -42,7 +42,7 @@ export default function PublicVideoCard({ video, onClick }) {
         )}
         <div className="flex flex-col">
           <h3 
-            className='font-medium text-sm line-clamp-2 text-black cursor-pointer hover:text-emerald-500'
+            className=' text-sm line-clamp-2 font-bold text-black cursor-pointer hover:text-emerald-500'
             onClick={() => onClick(videoData._id)}
           >
             {videoData.title}
