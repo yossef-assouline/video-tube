@@ -32,7 +32,7 @@ export default function CollapsedSideBar({ user }) {
   const isSelected = (path) => pathname === path;
 
   return (
-    <div className="fixed left-0 top-[64px] h-[calc(100vh-64px)] w-16 bg-white dark:bg-[#0f0f0f] border-r border-gray-200 dark:border-gray-800 z-40">
+    <div className="fixed left-0 top-[64px] h-[calc(100vh-64px)] w-16  bg-white dark:bg-[#0f0f0f] border-r border-gray-200 dark:border-gray-800 z-20">
       <div className="flex flex-col items-center py-4 space-y-8">
         {sidebarItems.map((item, index) => (
           <button

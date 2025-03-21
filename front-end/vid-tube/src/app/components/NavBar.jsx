@@ -75,7 +75,7 @@ export default function NavBar({ toggleSidebar }) {
               type="submit"
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
             >
-              <Search className="h-5 w-5" />
+              <Search className="h-5 w-5 text-black" />
             </button>
           </form>
           
@@ -84,7 +84,7 @@ export default function NavBar({ toggleSidebar }) {
             onClick={() => setIsSearchModalOpen(true)}
             className="sm:hidden p-2 hover:bg-gray-100 rounded-full"
           >
-            <Search className="h-5 w-5" />
+            <Search className="h-5 w-5 text-black" />
           </button>
         </div>
 

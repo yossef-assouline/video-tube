@@ -59,24 +59,26 @@ export default function WatchPage() {
   if (!video) return <NotFound />;
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 text-black">
+    <div className="min-h-screen bg-white dark:bg-gray-900  text-black">
       <NavBar toggleSidebar={toggleSidebar} />
       
-      <Sidebar 
-        user={loggedInUser}
-        isOpen={isSidebarOpen}
-        isMobile={isMobile}
-        onClose={() => setIsSidebarOpen(false)}
-        subscribedChannels={subscribedChannels}
-      />
+      
+        <Sidebar 
+          user={loggedInUser}
+          isOpen={isSidebarOpen}
+          isMobile={isMobile}
+          onClose={() => setIsSidebarOpen(false)}
+          subscribedChannels={subscribedChannels}
+        />
+      
 
-      <div className={`${isSidebarOpen ? 'hidden' : 'block'} xl:hidden`}>
+      <div className={`${isSidebarOpen ? 'hidden' : 'block'} hidden md:block xl:hidden`}>
         <CollapsedSideBar user={loggedInUser} />
       </div>
 
       <div className="flex bg-gray-200" >
         <div className={`
-          pt-16 pl-16 w-full transition-all duration-300
+          pt-16 md:pl-16 lg:pl-16 w-full transition-all duration-300
           ${isSidebarOpen && !isMobile ? 'lg:ml-64' : ''}
         `}>
           <div className="max-w-[2000px] mx-auto">
@@ -90,7 +92,7 @@ export default function WatchPage() {
                   </div>
                 </div>
 
-                <div className="px-4 lg:px-0 mt-4 space-y-4">
+                <div className="px-4 mt-4 space-y-4">
                   <VideoInfo 
                     video={video} 
                     user={loggedInUser} 

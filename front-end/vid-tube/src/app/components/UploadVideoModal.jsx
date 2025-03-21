@@ -51,7 +51,6 @@ export default function UploadVideoModal({ isOpen, onClose }) {
       const videoData = await publishVideo(formData);
       if(videoData) {
         // Fetch the uploaded video details
-        const uploadedVideoDetails = await getVideoById(videoData._id);
         setStep(3); // Move to success step
         toast.success('Video uploaded successfully');
       }
@@ -69,7 +68,7 @@ export default function UploadVideoModal({ isOpen, onClose }) {
     setTitle('');
     setDescription('');
     setIsPublic(true);
-    setUploadedVideo(null);
+    setUploadedVideoState(null);
   };
 
   if (!isOpen) return null;
